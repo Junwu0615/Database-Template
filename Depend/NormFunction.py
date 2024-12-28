@@ -28,9 +28,9 @@ class NormLogic:
             'CRITICAL': 'bold_red',
         }
         fmt = "%(log_color)s[%(asctime)s] %(levelname)s: %(message)s"
-        datefmt = '%Y-%m-%d %H:%M:%S'
+        date_fmt = '%Y-%m-%d %H:%M:%S'
         formatter = ColoredFormatter(fmt=fmt,
-                                     datefmt=datefmt,
+                                     datefmt=date_fmt,
                                      log_colors=colors_config,
                                      )
         console_handler = logging.StreamHandler()
@@ -50,11 +50,11 @@ class NormLogic:
         return target
 
     def trans_datetime(self, target: str, date_format: str) -> datetime:
-        # 轉成台灣時間 UTC +8
+        # 轉台灣時間 UTC +8
         return datetime.strptime(target, date_format).replace(tzinfo=tz.gettz('Asia/Taipei'))
 
     def trans_timestamp(self, target) -> datetime:
-        # 轉成台灣時間 UTC +8
+        # 轉台灣時間 UTC +8
         return datetime.fromtimestamp(target).replace(tzinfo=tz.gettz('Asia/Taipei'))
 
     def http_get(self, url: str) -> Response:

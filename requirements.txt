@@ -1,4 +1,6 @@
-requests==2.32.3
+tqdm==4.64.1
+pandas==2.2.3
 colorlog==6.9.0
+requests==2.32.3
 pyodbc==5.2.0
 sqlalchemy==2.0.36
