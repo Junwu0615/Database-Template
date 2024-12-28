@@ -10,8 +10,6 @@ from sqlalchemy.schema import CreateTable
 
 from Depend import Account
 
-BATCH_SIZE = 100
-
 class FromSQLProgrammingError(Exception):
     pass
 
@@ -46,9 +44,9 @@ class DatabaseLogic:
             if len(cursor.fetchall()) == 0:
                 sql_cmd = f'CREATE DATABASE {db_name}'
                 cursor.execute(sql_cmd)
-                print(f"資料庫 '{db_name}' 建立成功！")
+                self.log_warning(f'Database -> [{db_name}] Created Successfully')
             else:
-                print('資料庫已存在...')
+                self.log_warning(f'Database -> [{db_name}] Already Exists')
 
         except Exception as e:
             print(e)
@@ -67,15 +65,16 @@ class DatabaseLogic:
             cursor.execute(f'USE {self.db_name}')
 
             # 確認是否該資料表已存在
-            sql_cmd = f"SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = '{table_format.__table__.name}'"
+            table_name = table_format.__table__.name
+            sql_cmd = f"SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = '{table_name}'"
             cursor.execute(sql_cmd)
             # 若否則新建立
             if len(cursor.fetchall()) == 0:
                 sql_cmd = str(CreateTable(table_format.__table__).compile(dialect=mssql.dialect()))
                 cursor.execute(sql_cmd)
-                print('表格建立成功！')
+                self.log_warning(f'Table -> [{table_name}] Created Successfully')
             else:
-                print('表格已存在...')
+                self.log_warning(f'Table -> [{table_name}] Already Exists')
 
         except Exception as e:
             print(e)
@@ -83,7 +82,7 @@ class DatabaseLogic:
             cursor.close()
             conn.close()
 
-    def save_datum(self, db_name: str, table_format: sqlalchemy, table_name: str, save_data: dict):
+    def save_datum(self, db_name: str, table_format: sqlalchemy, table_name: str, save_data: dict, batch_size: int=500):
         """
         插入資料: 批次塞入
         """
@@ -96,26 +95,37 @@ class DatabaseLogic:
             conn = pyodbc.connect(self.connection_string, autocommit=True)
             cursor = conn.cursor()
             cursor.execute(f'USE {self.db_name}')
+            cursor.fast_executemany = True # 提高效能
 
             keys = save_data[list(save_data.keys())[0]].keys()
             keys = [f'[{i}]' for i in keys]
             _value = list(save_data.values())
-            for i in tqdm(range(0, len(_value), BATCH_SIZE), position=0):
-                value = _value[i:i + BATCH_SIZE]
+            # schedule = tqdm(len(_value))
+            schedule = 0
+            for idx in range(0, len(_value), batch_size):
+                feed_value = [tuple(i.values()) for i in _value[idx:idx + batch_size]]
+
                 # 判斷該鍵值是否已在表格: Merge(查詢, 更新, 插入)
+                placeholder = ', '.join([f"({', '.join(['?'] * len(keys))})"])
+                mapping_cols = ' AND '.join([f'Target.{col} = Source.{col}' for col in keys if col in table_format.__primary_key__])
+                update_cols = ', '.join([f'Target.{col} = Source.{col}' for col in keys if col not in table_format.__primary_key__])
+                cols = ', '.join(keys)
+                src_cols = ', '.join([f'Source.{col}' for col in keys])
+
                 sql_cmd = f"""
                 MERGE INTO {table_name} AS Target
-                USING (VALUES {', '.join(['(?, ?, ?, ?, ?, ?, ?, ?)'])}) AS Source ({', '.join(keys)})
-                ON {' and '.join([f'Target.{col} = Source.{col}' for col in keys])}
-                WHEN MATCHED THEN 
-                    UPDATE SET {', '.join([f'{col} = Source.{col}' for col in keys])}
-                WHEN NOT MATCHED THEN
-                    INSERT ({', '.join([f'{col}' for col in keys])})
-                    VALUES ({', '.join([f'Source.{col}' for col in keys])});
+                USING (VALUES {placeholder}) AS Source 
+                ({cols}) ON {mapping_cols}
+                WHEN MATCHED THEN UPDATE SET {update_cols}
+                WHEN NOT MATCHED THEN INSERT ({cols}) VALUES ({src_cols});
                 """
-                cursor.executemany(sql_cmd, [tuple(i.values()) for i in value])
+                try:
+                    cursor.executemany(sql_cmd, feed_value)
+                    schedule += len(feed_value)
+                    self.log_info(f'Store Data In The Database [{schedule} / {len(_value)}]')
 
-            print('資料插入成功')
+                except Exception as e:
+                    print(e)
 
         except Exception as e:
             print(e)

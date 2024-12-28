@@ -3,6 +3,8 @@
 @author: PC
 Update Time: 2024-12-28
 """
+import logging
+from colorlog import ColoredFormatter
 from dateutil import tz
 from datetime import datetime
 from requests import Session, Response
@@ -14,6 +16,30 @@ DATE_YMD_TWO = '%Y/%m/%d'
 class NormLogic:
     def __init__(self):
         self.session = Session()
+        self.logger = None
+        self.logger_settings()
+
+    def logger_settings(self):
+        colors_config = {
+            'INFO': 'white',
+            'WARNING': 'yellow',
+            'ERROR': 'red',
+            'DEBUG': 'green',
+            'CRITICAL': 'bold_red',
+        }
+        fmt = "%(log_color)s[%(asctime)s] %(levelname)s: %(message)s"
+        datefmt = '%Y-%m-%d %H:%M:%S'
+        formatter = ColoredFormatter(fmt=fmt,
+                                     datefmt=datefmt,
+                                     log_colors=colors_config,
+                                     )
+        console_handler = logging.StreamHandler()
+        console_handler.setLevel(logging.DEBUG)
+        console_handler.setFormatter(formatter)
+
+        self.logger = logging.getLogger(__name__)
+        self.logger.setLevel(logging.DEBUG)
+        self.logger.addHandler(console_handler)
 
     def trans_decimal(self, target, decimal_num: str) -> Decimal:
         return Decimal(target).quantize(Decimal(decimal_num), rounding=ROUND_HALF_UP)
@@ -42,11 +68,11 @@ class NormLogic:
         else:
             return self.session.get(url, json=payload, headers=headers)
 
-    def log_info(self):
-        pass
+    def log_info(self, ret_text: str):
+        self.logger.info(ret_text)
 
-    def log_warning(self):
-        pass
+    def log_warning(self, ret_text: str):
+        self.logger.warning(ret_text)
 
-    def log_error(self):
-        pass
+    def log_error(self, ret_text: str):
+        self.logger.error(ret_text, exc_info=True)

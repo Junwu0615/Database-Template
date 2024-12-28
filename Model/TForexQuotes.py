@@ -3,8 +3,10 @@
 @author: PC
 Update Time: 2024-12-27
 """
+from datetime import datetime
+
 from enum import Enum, IntEnum
-from sqlalchemy.orm import mapped_column
+from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, DateTime, Integer, DECIMAL, Unicode
 
@@ -24,8 +26,6 @@ class TForexQuotesField(Enum):
     CLOSE            =        'Close',                       '收盤價'
     VOLUME           =        'Volume',                      '交易量'
 
-
-
     def __new__(cls, value, name):
         ret_obj = object.__new__(cls)
         ret_obj._value_ = value
@@ -35,9 +35,17 @@ class TForexQuotesField(Enum):
 Base = declarative_base()
 class TableFormat(Base):
     __tablename__ = 'TForexQuotes'
+    __primary_key__ = [
+        TForexQuotesField.CREATEDATETIME.value,
+        TForexQuotesField.SYMBOL.value,
+        TForexQuotesField.INTERVAL.value,
+    ]
+    __primary_key__ = [f'[{i}]' for i in __primary_key__]
+
     CreateDateTime = mapped_column(DateTime, primary_key=True)
     Symbol = mapped_column(Unicode(12), primary_key=True)
     Interval = mapped_column(Unicode(6), primary_key=True)
+
     Open = mapped_column(DECIMAL(19, 2), nullable=True)
     High = mapped_column(DECIMAL(19, 2), nullable=True)
     Low = mapped_column(DECIMAL(19, 2), nullable=True)
