@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 """
 @author: PC
-Update Time: 2024-12-28
+Update Time: 2024-12-29
 """
-import logging
+import os, logging
 from dateutil import tz
 from datetime import datetime
 from colorlog import ColoredFormatter
@@ -12,6 +12,7 @@ from decimal import Decimal, ROUND_HALF_UP
 
 DATE_YMD_ONE = '%Y-%m-%d'
 DATE_YMD_TWO = '%Y/%m/%d'
+DATE_YMD_3TH = '%Y-%m-%d %H:%M:%S'
 
 class NormLogic:
     def __init__(self):
@@ -53,9 +54,9 @@ class NormLogic:
         # 轉台灣時間 UTC +8
         return datetime.strptime(target, date_format).replace(tzinfo=tz.gettz('Asia/Taipei'))
 
-    def trans_timestamp(self, target) -> datetime:
+    def trans_timestamp(self, target, change_num: float) -> datetime:
         # 轉台灣時間 UTC +8
-        return datetime.fromtimestamp(target).replace(tzinfo=tz.gettz('Asia/Taipei'))
+        return datetime.fromtimestamp(target + change_num).replace(tzinfo=tz.gettz('Asia/Taipei'))
 
     def http_get(self, url: str) -> Response:
         headers = None
@@ -74,5 +75,11 @@ class NormLogic:
     def log_warning(self, ret_text: str):
         self.logger.warning(ret_text)
 
-    def log_error(self, ret_text: str):
-        self.logger.error(ret_text, exc_info=True)
+    def log_error(self, ret_text: str, exc_info: bool=False):
+        self.logger.error(ret_text, exc_info=exc_info)
+
+    def create_folder(self, path: str):
+        # Create folder & Check Path Folder
+        folder = os.path.exists(path)
+        if not folder:
+            os.makedirs(path)

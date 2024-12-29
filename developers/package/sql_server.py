@@ -44,8 +44,8 @@ class DatabaseLogic:
             else:
                 self.log_warning(f'Database -> [{db_name}] Already Exists')
 
-        except Exception as e:
-            self.log_error(e)
+        except:
+            self.log_error('', exc_info=True)
         finally:
             cursor.close()
             conn.close()
@@ -70,8 +70,8 @@ class DatabaseLogic:
             else:
                 self.log_warning(f'Table -> [{table_name}] Already Exists')
 
-        except Exception as e:
-            self.log_error(e)
+        except:
+            self.log_error('', exc_info=True)
         finally:
             cursor.close()
             conn.close()
@@ -93,7 +93,7 @@ class DatabaseLogic:
             conn = pyodbc.connect(self.connection_string, autocommit=True)
             cursor = conn.cursor()
             cursor.execute(f'USE {self.db_name}')
-            cursor.fast_executemany = True # 提高效能
+            # cursor.fast_executemany = True # 提高效能
 
             keys = save_data[list(save_data.keys())[0]].keys()
             keys = [f'[{i}]' for i in keys]
@@ -123,13 +123,12 @@ class DatabaseLogic:
                     s_state += len(feed_value)
                     self.log_info(f'Store Data In The Database [M: {s_state}, F: {f_state}, T: {len(_value)}]')
 
-                except Exception as e:
+                except:
                     f_state += len(feed_value)
-                    self.log_error(f'Store Data In The Database [M: {s_state}, F: {f_state}, T: {len(_value)}]')
-                    self.log_error(e)
+                    self.log_error(f'Store Data In The Database [M: {s_state}, F: {f_state}, T: {len(_value)}]', exc_info=True)
 
-        except Exception as e:
-            self.log_error(e)
+        except:
+            self.log_error('', exc_info=True)
         finally:
             cursor.close()
             conn.close()
@@ -150,11 +149,11 @@ class DatabaseLogic:
             cursor.execute(f'SELECT * FROM {table_name}')
             try:
                 return cursor.fetchall()
-            except Exception as e:
-                self.log_error(e)
+            except:
+                self.log_error('', exc_info=True)
 
-        except Exception as e:
-            self.log_error(e)
+        except:
+            self.log_error('', exc_info=True)
         finally:
             cursor.close()
             conn.close()

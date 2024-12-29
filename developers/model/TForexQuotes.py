@@ -6,7 +6,7 @@ Update Time: 2024-12-29
 from enum import Enum, IntEnum
 from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, DateTime, Integer, DECIMAL, Unicode
+from sqlalchemy import Column, DateTime, Integer, BigInteger, DECIMAL, Unicode
 
 class TForexQuotesField(Enum):
     DB_TYPE          =        'DataCollect',                 '收集庫類型'
@@ -48,4 +48,4 @@ class TableFormat(Base):
     High = mapped_column(DECIMAL(19, 2), nullable=True)
     Low = mapped_column(DECIMAL(19, 2), nullable=True)
     Close = mapped_column(DECIMAL(19, 2), nullable=True)
-    Volume = mapped_column(Integer, nullable=True)
+    Volume = mapped_column(BigInteger, nullable=True)
