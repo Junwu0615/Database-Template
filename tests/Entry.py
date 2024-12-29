@@ -6,21 +6,20 @@ Update Time: 2024-12-28
 import json
 import pandas as pd
 
-from Depend.SqlServer import DatabaseLogic
-from Depend.NormFunction import NormLogic, DATE_YMD_ONE
-from Model.TForexQuotes import TForexQuotesField, TableFormat
+from package.norm_function import DATE_YMD_ONE
+from package.interface import Interface
+from model.TForexQuotes import TForexQuotesField, TableFormat
 
-class Entry(NormLogic, DatabaseLogic):
+class Entry(Interface):
     def __init__(self):
-        NormLogic.__init__(self)
-        DatabaseLogic.__init__(self)
+        Interface.__init__(self)
 
-    def main(self):
+    def update_once(self):
         """
         FIXME 情境模擬: 讀取本地檔案，並將其塞入資料庫
         """
         datum = {}
-        file = './Sample/xauusd_2024-12-26.json'
+        file = './sample/xauusd_2024-12-26.json'
         loader = [json.loads(i) for i in open(file, 'r')][0]
         symbol = loader['symbol']
         for i in loader['historical']:
@@ -48,4 +47,4 @@ class Entry(NormLogic, DatabaseLogic):
 
 if __name__ == '__main__':
     entry = Entry()
-    entry.main()
+    entry.update_once()

@@ -3,13 +3,13 @@
 @author: PC
 Update Time: 2024-12-28
 """
-from datetime import datetime
 import pyodbc, sqlalchemy
 # from tqdm import tqdm
+from datetime import datetime
 from sqlalchemy.dialects import mssql
 from sqlalchemy.schema import CreateTable
 
-from Depend import Account
+from package import sql_account
 
 class FromSQLProgrammingError(Exception):
     pass
@@ -17,8 +17,8 @@ class FromSQLProgrammingError(Exception):
 class DatabaseLogic:
     def __init__(self):
         self.db_name = 'DB_NULL'
-        self.connection_string = (f'DRIVER={Account.DRIVER};SERVER={Account.SERVER};DATABASE={self.db_name};'
-                                  f'UID={Account.USERNAME};PWD={Account.PASSWORD};Trusted_Connection=yes;')
+        self.connection_string = (f'DRIVER={sql_account.DRIVER};SERVER={sql_account.SERVER};DATABASE={self.db_name};'
+                                  f'UID={sql_account.USERNAME};PWD={sql_account.PASSWORD};Trusted_Connection=yes;')
 
     def __update_connection_string(self, db_name: str):
         """ 更新連接字串: 預期只開放內部呼叫 """
@@ -150,7 +150,6 @@ class DatabaseLogic:
 
             cursor.execute(f'SELECT * FROM {table_name}')
             try:
-                # 回傳結果
                 return cursor.fetchall()
             except Exception as e:
                 self.log_error(e)

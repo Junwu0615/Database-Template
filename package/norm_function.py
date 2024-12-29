@@ -4,9 +4,9 @@
 Update Time: 2024-12-28
 """
 import logging
-from colorlog import ColoredFormatter
 from dateutil import tz
 from datetime import datetime
+from colorlog import ColoredFormatter
 from requests import Session, Response
 from decimal import Decimal, ROUND_HALF_UP
 
