@@ -6,9 +6,9 @@ Update Time: 2024-12-28
 import json
 import pandas as pd
 
-from package.norm_function import DATE_YMD_ONE
-from package.interface import Interface
-from model.TForexQuotes import TForexQuotesField, TableFormat
+from developers.package.norm_function import DATE_YMD_ONE
+from developers.package.interface import Interface
+from developers.model.TForexQuotes import TForexQuotesField, TableFormat
 
 class Entry(Interface):
     def __init__(self):

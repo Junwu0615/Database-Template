@@ -30,11 +30,11 @@
 <br>
 
 ## C.　套件化安裝
-- package `sql_account_.py` -> `sql_account.py` 更改欲使用內容
 - 本目錄底下執行下方指令 # 若本專案更新，引用套件則會隨著更新
     ```commandline
     pip install -e .
     ```
+- package `sql_account_.py` -> `sql_account.py` 更改欲使用內容
 - 開發其他專案時可以直接引用本套件撰寫物件
 - ![02.jpg](/sample/02.jpg)
 

@@ -3,8 +3,8 @@
 @author: PC
 Update Time: 2024-12-29
 """
-from package.norm_function import NormLogic
-from package.sql_server import DatabaseLogic
+from developers.package.norm_function import NormLogic
+from developers.package.sql_server import DatabaseLogic
 
 class Interface(NormLogic, DatabaseLogic):
     def __init__(self):

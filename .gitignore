@@ -1,5 +1,5 @@
 __pycache__
 .idea
 .ipynb_checkpoints
-development_base.egg-info
+developers.egg-info
 sql_account.py
