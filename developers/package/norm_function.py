@@ -54,7 +54,7 @@ class NormLogic:
         # 轉台灣時間 UTC +8
         return datetime.strptime(target, date_format).replace(tzinfo=tz.gettz('Asia/Taipei'))
 
-    def trans_timestamp(self, target, change_num: float) -> datetime:
+    def trans_timestamp(self, target, change_num: float=0) -> datetime:
         # 轉台灣時間 UTC +8
         return datetime.fromtimestamp(target + change_num).replace(tzinfo=tz.gettz('Asia/Taipei'))
 
