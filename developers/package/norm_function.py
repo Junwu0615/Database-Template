@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 @author: PC
-Update Time: 2024-12-29
+Update Time: 2024-12-30
 """
 import os, logging
 from dateutil import tz
@@ -10,6 +10,7 @@ from colorlog import ColoredFormatter
 from requests import Session, Response
 from decimal import Decimal, ROUND_HALF_UP
 
+ERROR_TEXT = 'Error Logic: '
 DATE_YMD_ONE = '%Y-%m-%d'
 DATE_YMD_TWO = '%Y/%m/%d'
 DATE_YMD_3TH = '%Y-%m-%d %H:%M:%S'
@@ -20,6 +21,11 @@ class NormLogic:
         self.logger = None
         self.logger_settings()
 
+    def create_folder(self, path: str):
+        folder = os.path.exists(path)
+        if not folder:
+            os.makedirs(path)
+
     def logger_settings(self):
         colors_config = {
             'INFO': 'white',
@@ -29,7 +35,7 @@ class NormLogic:
             'CRITICAL': 'bold_red',
         }
         fmt = "%(log_color)s[%(asctime)s] %(levelname)s: %(message)s"
-        date_fmt = '%Y-%m-%d %H:%M:%S'
+        date_fmt = DATE_YMD_3TH
         formatter = ColoredFormatter(fmt=fmt,
                                      datefmt=date_fmt,
                                      log_colors=colors_config,
@@ -77,9 +83,3 @@ class NormLogic:
 
     def log_error(self, ret_text: str, exc_info: bool=False):
         self.logger.error(ret_text, exc_info=exc_info)
-
-    def create_folder(self, path: str):
-        # Create folder & Check Path Folder
-        folder = os.path.exists(path)
-        if not folder:
-            os.makedirs(path)

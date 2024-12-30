@@ -3,11 +3,12 @@
 @author: PC
 Update Time: 2024-12-29
 """
-from enum import Enum, IntEnum
+from enum import Enum, IntEnum, unique
 from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, DateTime, Integer, BigInteger, DECIMAL, Unicode
 
+@unique
 class TForexQuotesField(Enum):
     DB_TYPE          =        'DataCollect',                 '收集庫類型'
     TABLE_LEVEL      =        'L1',                          '一階資料'
@@ -25,10 +26,10 @@ class TForexQuotesField(Enum):
     VOLUME           =        'Volume',                      '交易量'
 
     def __new__(cls, value, name):
-        ret_obj = object.__new__(cls)
-        ret_obj._value_ = value
-        ret_obj.name_zh_tw = name
-        return ret_obj
+        callback = object.__new__(cls)
+        callback._value_ = value
+        callback.name_zh_tw = name
+        return callback
 
 Base = declarative_base()
 class TableFormat(Base):
