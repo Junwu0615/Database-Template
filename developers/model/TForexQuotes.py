@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 @author: PC
-Update Time: 2024-12-29
+Update Time: 2024-12-30
 """
 from enum import Enum, IntEnum, unique
 from sqlalchemy.orm import Mapped, mapped_column
@@ -11,8 +11,8 @@ from sqlalchemy import Column, DateTime, Integer, BigInteger, DECIMAL, Unicode
 @unique
 class TForexQuotesField(Enum):
     DB_TYPE          =        'DataCollect',                 '收集庫類型'
-    TABLE_LEVEL      =        'L1',                          '一階資料'
-    TABLE_DB         =        DB_TYPE[0] + TABLE_LEVEL[0],   '資料庫名稱'
+    DATA_LEVEL       =        'L1',                          '一階資料'
+    DB_NAME          =        DB_TYPE[0] + DATA_LEVEL[0],    '資料庫名稱'
 
     TABLE_NAME       =        'TForexQuotes',                '外匯收報價'
 
@@ -25,14 +25,14 @@ class TForexQuotesField(Enum):
     CLOSE            =        'Close',                       '收盤價'
     VOLUME           =        'Volume',                      '交易量'
 
-    def __new__(cls, value, name):
+    def __new__(cls, value: str, name: str):
         callback = object.__new__(cls)
         callback._value_ = value
         callback.name_zh_tw = name
         return callback
 
 Base = declarative_base()
-class TableFormat(Base):
+class TForexQuotesFormat(Base):
     __tablename__ = 'TForexQuotes'
     __primary_key__ = [
         TForexQuotesField.CREATEDATETIME.value,

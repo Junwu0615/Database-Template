@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 """
 @author: PC
-Update Time: 2024-12-28
+Update Time: 2024-12-30
 """
 import json
 import pandas as pd
 
 from developers.package.norm_function import DATE_YMD_ONE
 from developers.package.interface import Interface
-from developers.model.TForexQuotes import TForexQuotesField, TableFormat
+from developers.model.TForexQuotes import TForexQuotesField, TForexQuotesFormat
 
 class Entry(Interface):
     def __init__(self):
@@ -34,13 +34,13 @@ class Entry(Interface):
                 TForexQuotesField.CLOSE.value: self.trans_decimal(i['close'], '0.01'),
                 TForexQuotesField.VOLUME.value: self.trans_decimal(i['volume'], '0.01'),
             }
-        self.save_datum(db_name=TForexQuotesField.TABLE_DB.value,
+        self.save_datum(db_name=TForexQuotesField.DB_NAME.value,
                         table_name=TForexQuotesField.TABLE_NAME.value,
-                        table_format=TableFormat,
+                        table_format=TForexQuotesFormat,
                         save_data=datum)
 
         """ 查詢資料 """
-        fq_data = self.get_datum(db_name=TForexQuotesField.TABLE_DB.value,
+        fq_data = self.get_datum(db_name=TForexQuotesField.DB_NAME.value,
                                  table_name=TForexQuotesField.TABLE_NAME.value)
         df = pd.DataFrame(fq_data)
         print(df)
