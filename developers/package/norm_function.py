@@ -14,12 +14,16 @@ ERROR_TEXT = 'Error Logic: '
 DATE_YMD_ONE = '%Y-%m-%d'
 DATE_YMD_TWO = '%Y/%m/%d'
 DATE_YMD_3TH = '%Y-%m-%d %H:%M:%S'
+TAIWAN = tz.gettz('Asia/Taipei')
 
 class NormLogic:
     def __init__(self):
         self.session = Session()
         self.logger = None
         self.logger_settings()
+
+    def get_datetime_now(self) -> datetime:
+        return datetime.now().replace(tzinfo=TAIWAN)
 
     def create_folder(self, path: str):
         folder = os.path.exists(path)
@@ -58,11 +62,11 @@ class NormLogic:
 
     def trans_datetime(self, target: str, date_format: str) -> datetime:
         # 轉台灣時間 UTC +8
-        return datetime.strptime(target, date_format).replace(tzinfo=tz.gettz('Asia/Taipei'))
+        return datetime.strptime(target, date_format).replace(tzinfo=TAIWAN)
 
     def trans_timestamp(self, target, change_num: float=0) -> datetime:
         # 轉台灣時間 UTC +8
-        return datetime.fromtimestamp(target + change_num).replace(tzinfo=tz.gettz('Asia/Taipei'))
+        return datetime.fromtimestamp(target + change_num).replace(tzinfo=TAIWAN)
 
     def http_get(self, url: str) -> Response:
         headers = None

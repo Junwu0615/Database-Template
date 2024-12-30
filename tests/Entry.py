@@ -12,26 +12,24 @@ from developers.definition.state import State
 from developers.model.TForexQuotes import TForexQuotesField, TForexQuotesFormat
 
 class Entry(Interface):
-    def __init__(self):
-        super().__init__()
-        # Interface.__init__(self)
-        # self.__class__.__name__
+    def __init__(self, todo_time: list=[]):
+        super().__init__(todo_time)
 
-    def config_onece(self):
+    def config_once(self):
         """ 定義一次性變數 """
         pass
 
     def update_once(self):
         """ 主邏輯撰寫 """
-        # TODO ---  情境模擬: 讀取本地檔案，並將其塞入資料庫 ---
         try:
-
+            # 情境模擬: 讀取本地檔案，並將其塞入資料庫
             datum = {}
             ret = State.UNKNOWN
 
             file = './sample/xauusd_2024-12-26.json'
             loader = [json.loads(i) for i in open(file, 'r')][0]
             symbol = loader['symbol']
+
             for i in loader['historical']:
                 key = f"{i['date']}_{symbol}_D1"
                 datum[key] = {
@@ -49,17 +47,23 @@ class Entry(Interface):
                             table_format=TForexQuotesFormat,
                             save_data=datum)
 
-            """ 查詢資料 """
+            # 查詢資料
             fq_data = self.get_datum(db_name=TForexQuotesField.DB_NAME.value,
                                      table_name=TForexQuotesField.TABLE_NAME.value)
             df = pd.DataFrame(fq_data)
             self.log_info(df)
 
             ret = State.OK
+
         except Exception as e:
             self.log_error(ERROR_TEXT, exc_info=True)
         finally:
             return ret
 
 if __name__ == '__main__':
-    entry = Entry()
+    """
+    功能說明
+        -排程邏輯: 參閱 developers.package.interface <settings_schedule> 方法
+    """
+    todo_time = ['MTWTFss=06:00:00', 'MTWTFss=18:00:00']
+    entry = Entry(todo_time)

@@ -14,16 +14,18 @@
 | 事件 | 敘述 | 更新時間 |
 |:----:|----|:----:|
 | 專案上架 | Database Template | 2024-12-25 |
-| 建立常用函示 | NormFunction.py | 2024-12-28 |
-| 資料表: 模板定義 | 依 TForexQuotes.py 模板畫葫蘆 | 2024-12-28 |
+| 建立常用函示 | developers.package.norm_function | 2024-12-28 |
+| 資料表: 模板定義 | 依 developers.model.TForexQuotes 模板畫葫蘆 | 2024-12-28 |
 | 更新常用函示 | 日誌打印 / 字串處理 / 數值處理 / 爬蟲連線 | 2024-12-28 |
 | 模組化 | 將 SQL 串接 Database 過程模組化，並用繼承方式使用功能 | 2024-12-28 |
 | 套件化 | 將整個功能打包成套件，用安裝方式直接使用該功能 | 2024-12-29 |
 | 優化進入點 | __name__ == '__main__' 移至底層 | 2024-12-30 |
-| 定義運行狀態 | 詳見 package.definition.state | 2024-12-30 |
-| 加入排程邏輯 | 可依據參數定時設定，到點啟動專案 | - |
-| 調整 Merge 邏輯 | 用子方法 ( 插入 / 查詢 / 合併 ) 分別進行，不採用官方 Merge 語法 | - |
+| 定義運行狀態 | 詳見 developers.definition.state | 2024-12-30 |
+| 加入排程邏輯 | 可依據參數定時設定，到點啟動專案 | 2024-12-30 |
 | 查詢資料: 增加可用參數 | 參數時間 / WHERE SQL 條件篩選 | - |
+| 更新底層 | 外圍包大型迴圈，基於回傳狀態判斷是否 Retry | - |
+| 調整 Merge 邏輯 | 用子方法 ( 插入 / 查詢 / 合併 ) 分別進行，不採用官方 Merge 語法 | - |
+
 
 <br>
 
@@ -42,7 +44,7 @@
     pip install -e .
     ```
   - ![03.jpg](/sample/03.jpg)
-- package `sql_account_.py` -> `sql_account.py` 更改欲使用內容
+- developers.package.`sql_account_.py` -> `sql_account.py` 更改欲使用內容
 - 開發其他專案時可以直接引用本套件撰寫物件
 - ![02.jpg](/sample/02.jpg)
 
