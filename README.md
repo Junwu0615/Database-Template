@@ -1,8 +1,8 @@
 <a href='https://github.com/Junwu0615/Database-Template'><img alt='GitHub Views' src='https://views.whatilearened.today/views/github/Junwu0615/Database-Template.svg'> 
-<a href='https://github.com/Junwu0615/Database-Template'><img alt='GitHub Clones' src='https://img.shields.io/badge/dynamic/json?color=success&label=Clone&query=count_total&url=https://gist.githubusercontent.com/Junwu0615/65eaa98eafcee3f625a269fa70451f8a/raw/Database-Template_clone.json&logo=github'> </br>
+<a href='https://github.com/Junwu0615/Database-Template'><img alt='GitHub Clones' src='https://img.shields.io/badge/dynamic/json?color=success&label=Clone&query=count_total&url=https://gist.githubusercontent.com/Junwu0615/65eaa98eafcee3f625a269fa70451f8a/raw/Database-Template_clone.json&logo=github'> <br>
 [![](https://img.shields.io/badge/Project-Database_Template-blue.svg?style=plastic)](https://github.com/Junwu0615/Database-Template) 
 [![](https://img.shields.io/badge/Language-SQL_Server-blue.svg?style=plastic)](https://www.microsoft.com/zh-tw/sql-server/sql-server-downloads) 
-[![](https://img.shields.io/badge/Language-Python_3.12.0-blue.svg?style=plastic)](https://www.python.org/) </br>
+[![](https://img.shields.io/badge/Language-Python_3.12.0-blue.svg?style=plastic)](https://www.python.org/) <br>
 [![](https://img.shields.io/badge/Package-pyodbc_5.2.0-green.svg?style=plastic)](https://pypi.org/project/pyodbc/) 
 [![](https://img.shields.io/badge/Package-sqlalchemy_2.0.36-green.svg?style=plastic)](https://pypi.org/project/sqlalchemy/) 
 [![](https://img.shields.io/badge/Package-colorlog_6.9.0-green.svg?style=plastic)](https://pypi.org/project/colorlog/) 
@@ -19,11 +19,12 @@
 | 更新常用函示 | 日誌打印 / 字串處理 / 數值處理 / 爬蟲連線 | 2024-12-28 |
 | 模組化 | 將 SQL 串接 Database 過程模組化，並用繼承方式使用功能 | 2024-12-28 |
 | 套件化 | 將整個功能打包成套件，用安裝方式直接使用該功能 | 2024-12-29 |
-| 優化進入點 | __name__ == '__main__' 移至底層 | 2024-12-30 |
+| 定義制式規格 | update_once & config_once | 2024-12-30 |
 | 定義運行狀態 | 詳見 developers.definition.state | 2024-12-30 |
 | 加入排程邏輯 | 可依據參數定時設定，到點啟動專案 | 2024-12-30 |
 | 查詢資料: 增加可用參數 | 參數時間 / WHERE SQL 條件篩選 | - |
 | 更新底層 | 外圍包大型迴圈，基於回傳狀態判斷是否 Retry | - |
+| 優化進入點 | __name__ == '__main__' 移至底層 | - |
 | 調整 Merge 邏輯 | 用子方法 ( 插入 / 查詢 / 合併 ) 分別進行，不採用官方 Merge 語法 | - |
 
 

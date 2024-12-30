@@ -1,19 +1,20 @@
 # -*- coding: utf-8 -*-
 """
 @author: PC
-Update Time: 2024-12-30
+Update Time: 2024-12-31
 """
 import json
 import pandas as pd
 
-from developers.package.norm_function import DATE_YMD_ONE, ERROR_TEXT
-from developers.package.interface import Interface
-from developers.definition.state import State
-from developers.model.TForexQuotes import TForexQuotesField, TForexQuotesFormat
+from developer.package.norm_function import DATE_YMD_ONE, ERROR_TEXT
+from developer.package.interface import Interface
+from developer.definition.state import State
+from developer.model.TForexQuotes import TForexQuotesField, TForexQuotesFormat
 
 class Entry(Interface):
-    def __init__(self, todo_time: list=[]):
-        super().__init__(todo_time)
+    def __init__(self, do_time=None):
+        do_time = do_time or []
+        super().__init__(do_time)
 
     def config_once(self):
         """ 定義一次性變數 """
@@ -21,11 +22,10 @@ class Entry(Interface):
 
     def update_once(self):
         """ 主邏輯撰寫 """
+        datum = {}
+        ret = State.ERR_UNKNOWN
         try:
             # 情境模擬: 讀取本地檔案，並將其塞入資料庫
-            datum = {}
-            ret = State.UNKNOWN
-
             file = './sample/xauusd_2024-12-26.json'
             loader = [json.loads(i) for i in open(file, 'r')][0]
             symbol = loader['symbol']
@@ -63,7 +63,8 @@ class Entry(Interface):
 if __name__ == '__main__':
     """
     功能說明
-        -排程邏輯: 參閱 developers.package.interface <settings_schedule> 方法
+        -排程邏輯: 參閱 developer.package.interface <settings_schedule> 方法
     """
-    todo_time = ['MTWTFss=06:00:00', 'MTWTFss=18:00:00']
-    entry = Entry(todo_time)
+    do_time = ['MTWTFss=06:00:00', 'MTWTFss=18:00:00']
+    entry = Entry(do_time)
+    # entry = Entry()

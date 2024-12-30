@@ -1,34 +1,36 @@
 # -*- coding: utf-8 -*-
 """
 @author: PC
-Update Time: 2024-12-30
+Update Time: 2024-12-31
 """
 import time, schedule
 from datetime import datetime
 from schedule import every, run_pending
 
-from developers.definition.state import State
-from developers.package.norm_function import NormLogic
-from developers.package.sql_server import DatabaseLogic
+from developer.definition.state import State
+from developer.package.norm_function import NormLogic
+from developer.package.sql_server import DatabaseLogic
 
+# noinspection PyTypeChecker
 class Interface(NormLogic, DatabaseLogic):
-    def __init__(self, todo_time: list):
+    def __init__(self, do_time: list):
         NormLogic.__init__(self)
         DatabaseLogic.__init__(self)
-        self.var_next_run = []
-        self.settings_schedule(todo_time, self.originate)
         self.config_once()
         self.originate()
-        self.schedule_run()
+        if do_time:
+            self.var_next_run = []
+            self.settings_schedule(do_time, self.originate)
+            self.schedule_run()
 
-    def settings_schedule(self, todo_time, function):
+    def settings_schedule(self, do_time, function):
         """
         * 定時排程設定 *
-            -不使用 todo_time <為空> 或 <註解> 即可
+            -不使用 do_time <為空> 或 <註解> 即可
             -[周一至周日]: 英文字首排序 + 空格 + 欲啟動時間(台灣時間)
             -字母大寫意味著 <啟動> ; 反之小寫 <不啟動>
         """
-        for event in todo_time:
+        for event in do_time:
             d = event.split('=')[0]
             t = event.split('=')[-1]
             if d[0].upper() == 'M':
@@ -47,14 +49,14 @@ class Interface(NormLogic, DatabaseLogic):
                 every().sunday.at(t).do(function)
 
     def schedule_next_run(self) -> str:
-        timestamp = self.get_datetime_now().timestamp() + schedule.idle_seconds()
-        return datetime.fromtimestamp(timestamp).__str__()
+        return sorted([i.next_run for i in schedule.get_jobs()])[0].__str__()
 
     def schedule_run(self):
         while True:
-            if self.schedule_next_run() not in self.var_next_run:
-                self.var_next_run += [self.schedule_next_run()]
-                self.log_warning(f'Schedule Next Run: {self.schedule_next_run()}')
+            get_next_time = self.schedule_next_run()
+            if get_next_time not in self.var_next_run:
+                self.var_next_run += [get_next_time]
+                self.log_warning(f'Schedule Next Run: {get_next_time}')
             run_pending()
             time.sleep(1)
 
@@ -67,4 +69,4 @@ class Interface(NormLogic, DatabaseLogic):
     def originate(self):
         self.var_next_run = []
         ret = self.update_once()
-        self.log_warning(f'{repr(ret)}')
+        self.log_warning(ret)

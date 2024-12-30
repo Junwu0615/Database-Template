@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 """
 @author: PC
-Update Time: 2024-12-30
+Update Time: 2024-12-31
 """
+from typing import Union
 from enum import Enum, IntEnum, unique
 from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy.ext.declarative import declarative_base
@@ -25,7 +26,7 @@ class TForexQuotesField(Enum):
     CLOSE            =        'Close',                       '收盤價'
     VOLUME           =        'Volume',                      '交易量'
 
-    def __new__(cls, value: str, name: str):
+    def __new__(cls, value: str, name: str) -> Union['TForexQuotesField', str]:
         callback = object.__new__(cls)
         callback._value_ = value
         callback.name_zh_tw = name

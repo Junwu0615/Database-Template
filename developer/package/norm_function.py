@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 @author: PC
-Update Time: 2024-12-30
+Update Time: 2024-12-31
 """
 import os, logging
 from dateutil import tz
@@ -22,8 +22,8 @@ class NormLogic:
         self.logger = None
         self.logger_settings()
 
-    def get_datetime_now(self) -> datetime:
-        return datetime.now().replace(tzinfo=TAIWAN)
+    def get_datetime_now(self, tz: tz=TAIWAN) -> datetime:
+        return datetime.now().replace(tzinfo=tz)
 
     def create_folder(self, path: str):
         folder = os.path.exists(path)
@@ -60,13 +60,13 @@ class NormLogic:
             target = target.replace(symbol, '')
         return target
 
-    def trans_datetime(self, target: str, date_format: str) -> datetime:
+    def trans_datetime(self, target: str, date_format: str, tz: tz=TAIWAN) -> datetime:
         # 轉台灣時間 UTC +8
-        return datetime.strptime(target, date_format).replace(tzinfo=TAIWAN)
+        return datetime.strptime(target, date_format).replace(tzinfo=tz)
 
-    def trans_timestamp(self, target, change_num: float=0) -> datetime:
+    def trans_timestamp(self, target, change_num: float=0, tz: tz=TAIWAN) -> datetime:
         # 轉台灣時間 UTC +8
-        return datetime.fromtimestamp(target + change_num).replace(tzinfo=TAIWAN)
+        return datetime.fromtimestamp(target + change_num).replace(tzinfo=tz)
 
     def http_get(self, url: str) -> Response:
         headers = None

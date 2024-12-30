@@ -8,8 +8,8 @@ from tqdm import tqdm
 from datetime import datetime
 from sqlalchemy.dialects import mssql
 from sqlalchemy.schema import CreateTable
-from developers.package import sql_account
-from developers.package.norm_function import ERROR_TEXT
+from developer.package import sql_account
+from developer.package.norm_function import ERROR_TEXT
 
 class FromSQLProgrammingError(Exception):
     pass
