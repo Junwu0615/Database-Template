@@ -33,19 +33,19 @@ class Interface(NormLogic, DatabaseLogic):
         for event in do_time:
             d = event.split('=')[0]
             t = event.split('=')[-1]
-            if d[0].upper() == 'M':
+            if d[0] == 'M':
                 every().monday.at(t).do(function)
-            if d[1].upper() == 'T':
+            if d[1] == 'T':
                 every().tuesday.at(t).do(function)
-            if d[2].upper() == 'W':
+            if d[2] == 'W':
                 every().wednesday.at(t).do(function)
-            if d[3].upper() == 'T':
+            if d[3] == 'T':
                 every().thursday.at(t).do(function)
-            if d[4].upper() == 'F':
+            if d[4] == 'F':
                 every().friday.at(t).do(function)
-            if d[5].upper() == 'S':
+            if d[5] == 'S':
                 every().saturday.at(t).do(function)
-            if d[6].upper() == 'S':
+            if d[6] == 'S':
                 every().sunday.at(t).do(function)
 
     def schedule_next_run(self) -> str:
