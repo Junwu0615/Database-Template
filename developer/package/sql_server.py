@@ -77,7 +77,7 @@ class DatabaseLogic:
             cursor.close()
             conn.close()
 
-    def save_datum(self, db_name: str, table_name: str, table_format: sqlalchemy,
+    def save_datum(self, db_name: str, table_format: sqlalchemy,
                    save_data: dict, batch_size: int=500):
         """
         複合式功能
@@ -95,10 +95,13 @@ class DatabaseLogic:
             conn = pyodbc.connect(self.connection_string, autocommit=True)
             cursor = conn.cursor()
             cursor.execute(f'USE {self.db_name}')
+
+            table_name = table_format.__table__.name
             # cursor.fast_executemany = True # 提高效能
 
             keys = save_data[list(save_data.keys())[0]].keys()
-            keys = [f'[{i}]' for i in keys]
+            keys = [i for i in keys]
+            # keys = [f'[{i}]' for i in keys]
             _value = list(save_data.values())
 
             s_state = f_state = 0
@@ -135,7 +138,7 @@ class DatabaseLogic:
             cursor.close()
             conn.close()
 
-    def get_datum(self, db_name: str, table_name: str, table_format: sqlalchemy, date: datetime=None, **kwargs):
+    def get_datum(self, db_name: str, table_format: sqlalchemy, date: datetime=None, **kwargs):
         """
         查詢資料
             TODO 預計加入功能
@@ -149,27 +152,37 @@ class DatabaseLogic:
             cursor = conn.cursor()
             cursor.execute(f'USE {self.db_name}')
 
-            if 'WHERE' in kwargs:
-                cursor.execute(f"SELECT * FROM {table_name} WHERE {kwargs['WHERE']}")
-            else:
-                cursor.execute(f"SELECT * FROM {table_name}")
-            try:
-                columns = [f'[{i[0]}]' for i in cursor.description]
-                primary_key = table_format.__primary_key__
-                datum = {}
-                for content in [dict(zip(columns, i)) for i in cursor.fetchall()]:
-                    key = ''
-                    for k, v in content.items():
-                        if k in primary_key:
-                            if isinstance(v, datetime):
-                                key += f'{str(v)[:19]}_'
-                            else:
-                                key += f'{v}_'
-                    datum[key[:-1]] = content
+            # 確認是否該資料表已存在
+            table_name = table_format.__table__.name
+            sql_cmd = f"SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = '{table_name}'"
+            cursor.execute(sql_cmd)
 
-                return datum
-            except:
-                self.log_error(ERROR_TEXT, exc_info=True)
+            # 若否則回傳空字典
+            if len(cursor.fetchall()) == 0:
+                return {}
+            else:
+                if 'WHERE' in kwargs:
+                    cursor.execute(f"SELECT * FROM {table_name} WHERE {kwargs['WHERE']}")
+                else:
+                    cursor.execute(f"SELECT * FROM {table_name}")
+                try:
+                    # columns = [f'[{i[0]}]' for i in cursor.description]
+                    columns = [i[0] for i in cursor.description]
+                    primary_key = table_format.__primary_key__
+                    datum = {}
+                    for content in [dict(zip(columns, i)) for i in cursor.fetchall()]:
+                        key = ''
+                        for k, v in content.items():
+                            if k in primary_key:
+                                if isinstance(v, datetime):
+                                    key += f'{str(v)[:19]}_'
+                                else:
+                                    key += f'{v}_'
+                        datum[key[:-1]] = content
+
+                    return datum
+                except:
+                    self.log_error(ERROR_TEXT, exc_info=True)
 
         except:
             self.log_error(ERROR_TEXT, exc_info=True)

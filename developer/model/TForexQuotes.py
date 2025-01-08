@@ -40,7 +40,7 @@ class TForexQuotesFormat(Base):
         TForexQuotesField.SYMBOL.value,
         TForexQuotesField.INTERVAL.value,
     ]
-    __primary_key__ = [f'[{i}]' for i in __primary_key__]
+    __primary_key__ = [i for i in __primary_key__]
 
     CreateDateTime = mapped_column(DateTime, primary_key=True)
     Symbol = mapped_column(Unicode(12), primary_key=True)

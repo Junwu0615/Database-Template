@@ -43,17 +43,14 @@ class Entry(Interface):
                     TForexQuotesField.VOLUME.value: self.trans_decimal(i['volume'], '0.01'),
                 }
             self.save_datum(db_name=TForexQuotesField.DB_NAME.value,
-                            table_name=TForexQuotesField.TABLE_NAME.value,
                             table_format=TForexQuotesFormat,
                             save_data=datum)
 
             # 查詢資料
             # fq_data = self.get_datum(db_name=TForexQuotesField.DB_NAME.value,
-            #                          table_name=TForexQuotesField.TABLE_NAME.value,
             #                          table_format=TForexQuotesFormat)
 
             fq_data = self.get_datum(db_name=TForexQuotesField.DB_NAME.value,
-                                     table_name=TForexQuotesField.TABLE_NAME.value,
                                      table_format=TForexQuotesFormat,
                                      WHERE="Symbol = 'XAUUSD'")
 
