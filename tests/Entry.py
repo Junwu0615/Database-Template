@@ -48,8 +48,15 @@ class Entry(Interface):
                             save_data=datum)
 
             # 查詢資料
+            # fq_data = self.get_datum(db_name=TForexQuotesField.DB_NAME.value,
+            #                          table_name=TForexQuotesField.TABLE_NAME.value,
+            #                          table_format=TForexQuotesFormat)
+
             fq_data = self.get_datum(db_name=TForexQuotesField.DB_NAME.value,
-                                     table_name=TForexQuotesField.TABLE_NAME.value)
+                                     table_name=TForexQuotesField.TABLE_NAME.value,
+                                     table_format=TForexQuotesFormat,
+                                     WHERE="Symbol = 'XAUUSD'")
+
             df = pd.DataFrame(fq_data)
             self.log_info(df)
 

@@ -135,7 +135,7 @@ class DatabaseLogic:
             cursor.close()
             conn.close()
 
-    def get_datum(self, db_name: str, table_name: str, date: datetime=None):
+    def get_datum(self, db_name: str, table_name: str, table_format: sqlalchemy, date: datetime=None, **kwargs):
         """
         查詢資料
             TODO 預計加入功能
@@ -149,9 +149,25 @@ class DatabaseLogic:
             cursor = conn.cursor()
             cursor.execute(f'USE {self.db_name}')
 
-            cursor.execute(f'SELECT * FROM {table_name}')
+            if 'WHERE' in kwargs:
+                cursor.execute(f"SELECT * FROM {table_name} WHERE {kwargs['WHERE']}")
+            else:
+                cursor.execute(f"SELECT * FROM {table_name}")
             try:
-                return cursor.fetchall()
+                columns = [f'[{i[0]}]' for i in cursor.description]
+                primary_key = table_format.__primary_key__
+                datum = {}
+                for content in [dict(zip(columns, i)) for i in cursor.fetchall()]:
+                    key = ''
+                    for k, v in content.items():
+                        if k in primary_key:
+                            if isinstance(v, datetime):
+                                key += f'{str(v)[:19]}_'
+                            else:
+                                key += f'{v}_'
+                    datum[key[:-1]] = content
+
+                return datum
             except:
                 self.log_error(ERROR_TEXT, exc_info=True)
 
