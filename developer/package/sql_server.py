@@ -100,8 +100,7 @@ class DatabaseLogic:
             # cursor.fast_executemany = True # 提高效能
 
             keys = save_data[list(save_data.keys())[0]].keys()
-            keys = [i for i in keys]
-            # keys = [f'[{i}]' for i in keys]
+            keys = [f'[{i}]' for i in keys]
             _value = list(save_data.values())
 
             s_state = f_state = 0
@@ -109,7 +108,7 @@ class DatabaseLogic:
                 feed_value = [tuple(i.values()) for i in _value[idx:idx + batch_size]]
 
                 # 判斷該鍵值是否已在表格: Merge(查詢, 更新, 插入)
-                primary_key = table_format.__primary_key__
+                primary_key = table_format.__primary_key_symbol__
                 placeholder = ', '.join([f"({', '.join(['?'] * len(keys))})"])
                 mapping_cols = ' AND '.join([f'Target.{col} = Source.{col}' for col in keys if col in primary_key])
                 update_cols = ', '.join([f'Target.{col} = Source.{col}' for col in keys if col not in primary_key])

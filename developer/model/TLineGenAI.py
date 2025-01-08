@@ -37,7 +37,7 @@ class TLineGenAIFormat(Base):
     __primary_key__ = [
         TLineGenAIField.USER_ID.value,
     ]
-    __primary_key__ = [i for i in __primary_key__]
+    __primary_key_symbol__ = [f'[{i}]' for i in __primary_key__]
 
     USER_ID = mapped_column(Unicode(128), primary_key=True)
     TEXT_COUNT = mapped_column(Integer, nullable=True)
