@@ -6,7 +6,7 @@ Update Time: 2024-12-31
 import json
 import pandas as pd
 
-from developer.package.norm_function import DATE_YMD_ONE, ERROR_TEXT
+from developer.package.norm_function import DATE_YMD_ONE
 from developer.package.interface import Interface
 from developer.definition.state import State
 from developer.model.TForexQuotes import TForexQuotesField, TForexQuotesFormat
@@ -52,7 +52,7 @@ class Entry(Interface):
 
             fq_data = self.get_datum(db_name=TForexQuotesField.DB_NAME.value,
                                      table_format=TForexQuotesFormat,
-                                     WHERE="Symbol = 'XAUUSD'")
+                                     **{'SQL_WHERE': "Symbol = 'XAUUSD'"})
 
             df = pd.DataFrame(fq_data)
             self.log_info(df)
@@ -60,7 +60,7 @@ class Entry(Interface):
             ret = State.OK
 
         except Exception as e:
-            self.log_error(ERROR_TEXT, exc_info=True)
+            self.log_error(exc_info=True)
         finally:
             return ret
 

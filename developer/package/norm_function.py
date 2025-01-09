@@ -10,7 +10,6 @@ from colorlog import ColoredFormatter
 from requests import Session, Response
 from decimal import Decimal, ROUND_HALF_UP
 
-ERROR_TEXT = 'Error Logic: '
 DATE_YMD_ONE = '%Y-%m-%d'
 DATE_YMD_TWO = '%Y/%m/%d'
 DATE_YMD_3TH = '%Y-%m-%d %H:%M:%S'
@@ -79,11 +78,11 @@ class NormLogic:
         else:
             return self.session.get(url, json=payload, headers=headers)
 
-    def log_info(self, ret_text: str):
+    def log_info(self, ret_text: str=''):
         self.logger.info(ret_text)
 
-    def log_warning(self, ret_text: str):
+    def log_warning(self, ret_text: str=''):
         self.logger.warning(ret_text)
 
-    def log_error(self, ret_text: str, exc_info: bool=False):
+    def log_error(self, ret_text: str='', exc_info: bool=False):
         self.logger.error(ret_text, exc_info=exc_info)

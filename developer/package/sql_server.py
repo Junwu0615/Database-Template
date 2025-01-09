@@ -9,7 +9,6 @@ from datetime import datetime
 from sqlalchemy.dialects import mssql
 from sqlalchemy.schema import CreateTable
 from developer.package import sql_account
-from developer.package.norm_function import ERROR_TEXT
 
 class FromSQLProgrammingError(Exception):
     pass
@@ -46,7 +45,7 @@ class DatabaseLogic:
             #     self.log_warning(f'Database -> [{db_name}] Already Exists')
 
         except:
-            self.log_error(ERROR_TEXT, exc_info=True)
+            self.log_error(exc_info=True)
         finally:
             cursor.close()
             conn.close()
@@ -72,7 +71,7 @@ class DatabaseLogic:
             #     self.log_warning(f'Table -> [{table_name}] Already Exists')
 
         except:
-            self.log_error(ERROR_TEXT, exc_info=True)
+            self.log_error(exc_info=True)
         finally:
             cursor.close()
             conn.close()
@@ -132,7 +131,7 @@ class DatabaseLogic:
                     self.log_error(f'Store Data In The Database [M: {s_state}, F: {f_state}, T: {len(_value)}]', exc_info=True)
 
         except:
-            self.log_error(ERROR_TEXT, exc_info=True)
+            self.log_error(exc_info=True)
         finally:
             cursor.close()
             conn.close()
@@ -161,7 +160,7 @@ class DatabaseLogic:
                 return {}
             else:
                 if 'WHERE' in kwargs:
-                    cursor.execute(f"SELECT * FROM {table_name} WHERE {kwargs['WHERE']}")
+                    cursor.execute(f"SELECT * FROM {table_name} WHERE {kwargs['SQL_WHERE']}")
                 else:
                     cursor.execute(f"SELECT * FROM {table_name}")
                 try:
@@ -181,10 +180,10 @@ class DatabaseLogic:
 
                     return datum
                 except:
-                    self.log_error(ERROR_TEXT, exc_info=True)
+                    self.log_error(exc_info=True)
 
         except:
-            self.log_error(ERROR_TEXT, exc_info=True)
+            self.log_error(exc_info=True)
         finally:
             cursor.close()
             conn.close()
