@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 @author: PC
-Update Time: 2025-01-08
+Update Time: 2025-01-10
 """
 from typing import Union
 from enum import Enum, IntEnum, unique
@@ -20,10 +20,12 @@ class TLineGenAIField(Enum):
     USER_ID          =        'USER_ID',                     '商品代碼'
     TEXT_COUNT       =        'TEXT_COUNT',                  '接收字串次數'
     MEDIA_COUNT      =        'MEDIA_COUNT',                 '接收媒體次數'
-    A_SERVE          =        'A_SERVE',                     'identify food and feedback'
-    B_SERVE          =        'B_SERVE',                     'gif meme name search'
-    C_SERVE          =        'C_SERVE',                     'human companion robot'
-    D_SERVE          =        'D_SERVE',                     'generate self-introduction'
+    A_SERVE          =        'A_SERVE',                     "creator's github"
+    B_SERVE          =        'B_SERVE',                     'identify food and feedback'
+    C_SERVE          =        'C_SERVE',                     'gif meme name search'
+    D_SERVE          =        'D_SERVE',                     "creator's dashboard"
+    E_SERVE          =        'E_SERVE',                     'human companion robot'
+    F_SERVE          =        'F_SERVE',                     'generate self-introduction'
 
     def __new__(cls, value: str, name: str) -> Union['TLineGenAIField', str]:
         callback = object.__new__(cls)
@@ -46,3 +48,5 @@ class TLineGenAIFormat(Base):
     B_SERVE = mapped_column(Integer, nullable=True)
     C_SERVE = mapped_column(Integer, nullable=True)
     D_SERVE = mapped_column(Integer, nullable=True)
+    E_SERVE = mapped_column(Integer, nullable=True)
+    F_SERVE = mapped_column(Integer, nullable=True)
