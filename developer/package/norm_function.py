@@ -1,8 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-@author: PC
-Update Time: 2024-12-31
-"""
 import os, logging
 from dateutil import tz
 from datetime import datetime

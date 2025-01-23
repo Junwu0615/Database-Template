@@ -1,8 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-@author: PC
-Update Time: 2024-12-31
-"""
 import time, schedule
 from datetime import datetime
 from schedule import every, run_pending

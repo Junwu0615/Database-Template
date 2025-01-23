@@ -1,14 +1,10 @@
 # -*- coding: utf-8 -*-
-"""
-@author: PC
-Update Time: 2024-12-30
-"""
-import pyodbc, sqlalchemy
+import os, pyodbc, sqlalchemy
 from tqdm import tqdm
 from datetime import datetime
 from sqlalchemy.dialects import mssql
 from sqlalchemy.schema import CreateTable
-from developer.package import sql_account
+from developer.package.sql_account import USERNAME, PASSWORD, DRIVER, SERVER, SERVER_HOST
 
 class FromSQLProgrammingError(Exception):
     pass
@@ -16,8 +12,11 @@ class FromSQLProgrammingError(Exception):
 class DatabaseLogic:
     def __init__(self):
         self.db_name = 'DB_NULL'
-        self.connection_string = (f'DRIVER={sql_account.DRIVER};SERVER={sql_account.SERVER};DATABASE={self.db_name};'
-                                  f'UID={sql_account.USERNAME};PWD={sql_account.PASSWORD};Trusted_Connection=yes;')
+        self.connection_string = (f'DRIVER={DRIVER};SERVER={SERVER},{SERVER_HOST};DATABASE={self.db_name};'
+                                  f'UID={USERNAME};PWD={PASSWORD};')
+        # self.connection_string += 'Trusted_Connection=yes;'
+        self.connection_string += 'TrustServerCertificate=Yes;' # 本地開發/docker皆可運行
+        # self.connection_string += 'Encrypt=True;'
 
     def __update_connection_string(self, db_name: str):
         """ 更新連接字串: 預期只開放內部呼叫 """
