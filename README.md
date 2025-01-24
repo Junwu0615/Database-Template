@@ -9,7 +9,7 @@
 
 <br>
 
-## A.　更新計畫
+## *A.　Update Plan*
 
 | 事件 | 敘述 | 更新時間 |
 |:----:|----|:----:|
@@ -31,35 +31,59 @@
 
 <br>
 
-## B.　成果展示
+## *B.　Showcase Results*
+
+### *Directory Structure Diagram*
+```commandline
+Database-Template/developer
+  │
+  ├── __init__.py
+  │
+  ├── definition
+  │   ├── __init__.py
+  │   └── state.py
+  │
+  ├── model
+  │   ├── __init__.py
+  │   ├── TForexQuotes.py
+  │   └── TLineGenAI.py
+  │
+  └── package
+      ├── __init__.py
+      ├── interface.py
+      ├── norm_function.py
+      ├── sql_account.py
+      └── sql_server.py
+```
+
 ![00.gif](/sample/00.gif)
 
 ![00.jpg](/sample/00.jpg)
 
-![01.jpg](/sample/01.jpg)
+[//]: # (![01.jpg]&#40;/sample/01.jpg&#41;)
 
 <br>
 
-## C.　套件化安裝
+## *C.　Installation*
 - 本目錄底下執行下方指令 # 若本專案更新，引用套件則會隨著更新
     ```commandline
     pip install -e .
     ```
   - ![03.jpg](/sample/03.jpg)
-- developers.package.`sql_account_.py` -> `sql_account.py` 更改欲使用內容
+- `developers.package.sql_account.py` 更改欲使用內容，或是直接設定環境變數
 - 開發其他專案時可以直接引用本套件撰寫物件
 - ![02.jpg](/sample/02.jpg)
 
 <br>
 
-## D.　學習紀錄
+## *D.　Learning Record*
 
-### I.　SQL 語法
-#### 新建資料庫
+### *I.　SQL 語法*
+#### *新建資料庫*
 ```sql
 CREATE DATABASE <MyDatabase>;
 ```
-#### 刪除資料庫順序 : 一律手動，勿程式化
+#### *刪除資料庫順序 : 一律手動，勿程式化*
 ```sql
 -- 檢查資料庫是否存在
 SELECT name FROM master.sys.databases WHERE name = '<MyDatabase>';
@@ -79,23 +103,23 @@ SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = <MyDatabase>;
 
 <br>
 
-### II.　Python 串接語法
-#### 顯示系統上可用的所有 ODBC 驅動
+### *II.　Python 串接 SQL server 語法*
+#### *顯示系統上可用的所有 ODBC 驅動*
 ```py
 pyodbc.drivers()
 ```
 
 <br>
 
-### III.　模型規格紀錄
-#### a.　整數類型
+### *III.　資料模型規格*
+#### *a.　整數類型*
 | 類型 | 說明 |
 |:----|:----|
 | Integer | 對應 SQL 的整數類型，如 INT |
 | SmallInteger | 對應 SQL 的小整數類型，如 SMALLINT |
 | BigInteger | 用於大整數，對應 SQL 的 BIGINT |
 
-#### b.　字符串類型
+#### *b.　字符串類型*
 | 類型 | 說明 |
 |:----|:----|
 | String(length) | 可變長度的字符串。length 指定最大長度，對應 SQL 的 VARCHAR |
@@ -104,14 +128,14 @@ pyodbc.drivers()
 | UnicodeText | 支持 Unicode 的長文本，類似 Text |
 | CHAR(length) | 固定長度字符串，對應 SQL 的 CHAR |
 
-#### c.　數值類型
+#### *c.　數值類型*
 | 類型 | 說明 |
 |:----|:----|
 | Float | 浮點數，對應 SQL 的 FLOAT 或 REAL |
 | Numeric(precision, scale) | 精確數值類型，對應 SQL 的 NUMERIC 或 DECIMAL，用於高精度計算 |
 | DECIMAL(precision, scale) | 與 Numeric 相同，是其別名 |
 
-#### d.　日期和時間類型
+#### *d.　日期和時間類型*
 | 類型 | 說明 |
 |:----|:----|
 | Date | 僅日期部分，對應 SQL 的 DATE |
@@ -119,30 +143,30 @@ pyodbc.drivers()
 | DateTime | 日期和時間，對應 SQL 的 DATETIME 或 TIMESTAMP |
 | Interval | 時間間隔，對應 SQL 的 INTERVAL |
 
-#### e.　布林值類型
+#### *e.　布林值類型*
 | 類型 | 說明 |
 |:----|:----|
 | Boolean  | 布林值，對應 SQL 的 BOOLEAN，存儲 True 或 False |
 
-#### f.　二進制類型
+#### *f.　二進制類型*
 | 類型 | 說明 |
 |:----|:----|
 | LargeBinary | 二進制數據，對應 SQL 的 BLOB 或 BYTEA |
 
-#### g.　UUID 類型
+#### *g.　UUID 類型*
 | 類型 | 說明 |
 |:----|:----|
 | UUID | 用於存儲通用唯一標識符（UUID），對應 SQL 的相關類型（如 UUID）|
 
-#### h.　JSON 類型
+#### *h.　JSON 類型*
 | 類型 | 說明 |
 |:----|:----|
 | JSON | 用於存儲 JSON 數據，對應 SQL 的 JSON 或類似類型 |
 
 <br>
 
-### IV.　其他備註
-#### 查看 ODBC 版本(名稱) 
+### *IV.　其他備註*
+#### *查看 ODBC 版本(名稱)*
 ```
 win + R : odbcad32 -> 切到驅動程式 -> ex: ODBC Driver 17 for SQL Server
 ```
@@ -150,7 +174,7 @@ win + R : odbcad32 -> 切到驅動程式 -> ex: ODBC Driver 17 for SQL Server
 <br>
 
 
-## E.　資源連結
+## *E.　Reference Sources*
 - [特別感謝 DL 前輩](https://github.com/dl-jack-123)
 - [OpenAI ChatGPT](https://openai.com/chatgpt/overview/)
 - [輕量級 SQL IDE: Azure Data Studio](https://learn.microsoft.com/en-us/azure-data-studio/download-azure-data-studio?view=sql-server-ver16&tabs=win-install%2Cwin-user-install%2Credhat-install%2Cwindows-uninstall%2Credhat-uninstall) <br>
