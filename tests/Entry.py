@@ -2,6 +2,7 @@
 import pandas as pd
 
 from developer.utils.normal import *
+from developer.utils.telegram import send_message
 from developer.modules.logger import Logger
 from developer.modules.interface import Interface
 from developer.modules.models.WorkStatus import Status
@@ -27,6 +28,7 @@ class Entry(Interface):
         """ 主邏輯撰寫 """
         datum = {}
         ret = Status.ERR_UNKNOWN
+        # send_message(msg='test', logger=self.logger, bot_token='', chat_id='')
         try:
             # 情境模擬: 讀取本地檔案，並將其塞入資料庫
             file = './sample/xauusd_2024-12-26.json'
@@ -36,14 +38,14 @@ class Entry(Interface):
             for i in loader['historical']:
                 key = f"{i['date']}_{symbol}_D1"
                 datum[key] = {
-                    TForexQuotesField.CREATEDATETIME.value: self.trans_datetime(i['date'], SHORT_FORMAT),
+                    TForexQuotesField.CREATEDATETIME.value: trans_datetime(i['date'], SHORT_FORMAT),
                     TForexQuotesField.SYMBOL.value: symbol,
                     TForexQuotesField.INTERVAL.value: 'D1',
-                    TForexQuotesField.OPEN.value: self.trans_decimal(i['open'], '0.01'),
-                    TForexQuotesField.HIGH.value: self.trans_decimal(i['high'], '0.01'),
-                    TForexQuotesField.LOW.value: self.trans_decimal(i['low'], '0.01'),
-                    TForexQuotesField.CLOSE.value: self.trans_decimal(i['close'], '0.01'),
-                    TForexQuotesField.VOLUME.value: self.trans_decimal(i['volume'], '0.01'),
+                    TForexQuotesField.OPEN.value: trans_decimal(i['open'], '0.01'),
+                    TForexQuotesField.HIGH.value: trans_decimal(i['high'], '0.01'),
+                    TForexQuotesField.LOW.value: trans_decimal(i['low'], '0.01'),
+                    TForexQuotesField.CLOSE.value: trans_decimal(i['close'], '0.01'),
+                    TForexQuotesField.VOLUME.value: trans_decimal(i['volume'], '0.01'),
                 }
             self.save_datum(db_name=TForexQuotesField.DB_NAME.value,
                             table_format=TForexQuotesFormat,

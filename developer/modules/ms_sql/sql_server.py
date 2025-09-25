@@ -5,7 +5,6 @@ from sqlalchemy.schema import CreateTable
 from developer.utils.normal import *
 from developer.modules.ms_sql.sql_account import USERNAME, PASSWORD, DRIVER, SERVER, SERVER_HOST
 
-
 class FromSQLProgrammingError(Exception):
     pass
 
@@ -41,12 +40,12 @@ class MSDatabase:
             if len(cursor.fetchall()) == 0:
                 sql_cmd = f'CREATE DATABASE {db_name}'
                 cursor.execute(sql_cmd)
-                self.logger.warning(f'Database -> [{db_name}] Created Successfully')
+                self.logger.warning(f'[{MODULE_NAME}] Database -> [{db_name}] Created Successfully')
             # else:
-            #     self.logger.warning(f'Database -> [{db_name}] Already Exists')
+            #     self.logger.warning(f'[{MODULE_NAME}] Database -> [{db_name}] Already Exists')
 
         except Exception as e:
-            self.logger.error()
+            self.logger.error(f'[{MODULE_NAME}: __create_database]')
 
         finally:
             cursor.close()
@@ -69,12 +68,12 @@ class MSDatabase:
             if len(cursor.fetchall()) == 0:
                 sql_cmd = str(CreateTable(table_format.__table__).compile(dialect=mssql.dialect()))
                 cursor.execute(sql_cmd)
-                self.logger.warning(f'Table -> [{table_name}] Created Successfully')
+                self.logger.warning(f'[{MODULE_NAME}] Table -> [{table_name}] Created Successfully')
             # else:
-            #     self.logger.warning(f'Table -> [{table_name}] Already Exists')
+            #     self.logger.warning(f'[{MODULE_NAME}] Table -> [{table_name}] Already Exists')
 
         except Exception as e:
-            self.logger.error()
+            self.logger.error(f'[{MODULE_NAME}: __create_table]')
 
         finally:
             cursor.close()
@@ -129,14 +128,16 @@ class MSDatabase:
                 try:
                     cursor.executemany(sql_cmd, feed_value)
                     s_state += len(feed_value)
-                    self.logger.info(f'Store Data In The Database [M: {s_state}, F: {f_state}, T: {len(_value)}]')
+                    self.logger.info(f'[{MODULE_NAME}: save_datum] '
+                                     f'Store Data In The Database [M: {s_state}, F: {f_state}, T: {len(_value)}]')
 
                 except Exception as e:
                     f_state += len(feed_value)
-                    self.logger.error(f'Store Data In The Database [M: {s_state}, F: {f_state}, T: {len(_value)}]')
+                    self.logger.error(f'[{MODULE_NAME}: save_datum] '
+                                      f'Store Data In The Database [M: {s_state}, F: {f_state}, T: {len(_value)}]')
 
         except Exception as e:
-            self.logger.error()
+            self.logger.error(f'[{MODULE_NAME}: save_datum]')
 
         finally:
             cursor.close()
@@ -172,7 +173,6 @@ class MSDatabase:
                 else:
                     cursor.execute(f"SELECT * FROM {table_name}")
                 try:
-                    # columns = [f'[{i[0]}]' for i in cursor.description]
                     columns = [i[0] for i in cursor.description]
                     primary_key = table_format.__primary_key__
                     datum = {}
@@ -189,10 +189,10 @@ class MSDatabase:
                     return datum
 
                 except Exception as e:
-                    self.logger.error()
+                    self.logger.error(f'[{MODULE_NAME}: get_datum]')
 
         except Exception as e:
-            self.logger.error()
+            self.logger.error(f'[{MODULE_NAME}: get_datum]')
 
         finally:
             cursor.close()

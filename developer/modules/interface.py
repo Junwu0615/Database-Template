@@ -2,12 +2,15 @@
 import schedule
 from schedule import every, run_pending
 from developer.utils.normal import *
+from developer.modules.crawler import CrawlerLogic
 from developer.modules.ms_sql.sql_server import MSDatabase
 
+MODULE_NAME = __name__.upper()
+
 # noinspection PyTypeChecker
-class Interface(NormLogic, MSDatabase):
+class Interface(CrawlerLogic, MSDatabase):
     def __init__(self, do_time: list, logger: logging.Logger):
-        NormLogic.__init__(self, logger)
+        CrawlerLogic.__init__(self, logger)
         MSDatabase.__init__(self, logger)
         self.logger = logger
         self.config_once()
@@ -53,7 +56,7 @@ class Interface(NormLogic, MSDatabase):
             get_next_time = self.schedule_next_run()
             if get_next_time not in self.var_next_run:
                 self.var_next_run += [get_next_time]
-                self.logger.warning(f'Schedule Next Run: {get_next_time}')
+                self.logger.warning(f'[{MODULE_NAME}] Schedule Next Run: {get_next_time}')
             run_pending()
             time.sleep(1)
 
@@ -69,4 +72,4 @@ class Interface(NormLogic, MSDatabase):
     def originate(self):
         self.var_next_run = []
         ret = self.update_once()
-        self.logger.warning(ret)
+        self.logger.warning(f'[{MODULE_NAME}] {ret}')
