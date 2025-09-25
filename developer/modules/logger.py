@@ -17,12 +17,15 @@ FILE_FMT = '[%(asctime)s] %(levelname)s: %(message)s'
 CONSOLE_FMT = '%(log_color)s[%(asctime)s] %(levelname)s: %(message)s'
 
 class Logger:
-    def __init__(self, console_name: str=None, file_name: str=None,
+    def __init__(self, console_name: str=None, file_name: str=None, use_docker=None,
                  file_path: str=None, max_bytes: int=(15 * 1024 * 1024),
                  backup_count: int=100):
 
-        if file_path is None and file_name is not None:
+        if file_path is None and file_name is not None and use_docker is None:
             file_path = 'log' + file_name.replace('.', '/') + '.txt'
+
+        elif file_path is None and file_name is not None and use_docker is not None:
+            file_path = use_docker + file_name.replace('.', '/') + '.txt'
 
         self.console_log = None
         if console_name is not None:
