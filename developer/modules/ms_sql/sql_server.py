@@ -4,19 +4,20 @@ from tqdm import tqdm
 from datetime import datetime
 from sqlalchemy.dialects import mssql
 from sqlalchemy.schema import CreateTable
-from developer.package.sql_account import USERNAME, PASSWORD, DRIVER, SERVER, SERVER_HOST
+from developer.modules.ms_sql.sql_account import USERNAME, PASSWORD, DRIVER, SERVER, SERVER_HOST
+
 
 class FromSQLProgrammingError(Exception):
     pass
+
 
 class DatabaseLogic:
     def __init__(self):
         self.db_name = 'DB_NULL'
         self.connection_string = (f'DRIVER={DRIVER};SERVER={SERVER},{SERVER_HOST};DATABASE={self.db_name};'
                                   f'UID={USERNAME};PWD={PASSWORD};')
-        # self.connection_string += 'Trusted_Connection=yes;'
         self.connection_string += 'TrustServerCertificate=Yes;' # 本地開發/docker皆可運行
-        # self.connection_string += 'Encrypt=True;'
+
 
     def __update_connection_string(self, db_name: str):
         """ 更新連接字串: 預期只開放內部呼叫 """
@@ -24,9 +25,10 @@ class DatabaseLogic:
             self.connection_string = self.connection_string.replace(self.db_name, db_name)
             self.db_name = db_name
 
+
     def __create_database(self, db_name: str):
         """ 建立資料庫: 預期只開放內部呼叫 """
-        conn = cursor = None
+        conn, cursor = None, None
         try:
             sql_cmd = self.connection_string.replace(f'DATABASE={self.db_name};', '')
             conn = pyodbc.connect(sql_cmd, autocommit=True)
@@ -49,9 +51,10 @@ class DatabaseLogic:
             cursor.close()
             conn.close()
 
+
     def __create_table(self, table_format: sqlalchemy):
         """ 建立表格: 預期只開放內部呼叫 """
-        conn = cursor = None
+        conn, cursor = None, None
         try:
             conn = pyodbc.connect(self.connection_string, autocommit=True)
             cursor = conn.cursor()
@@ -75,6 +78,7 @@ class DatabaseLogic:
             cursor.close()
             conn.close()
 
+
     def save_datum(self, db_name: str, table_format: sqlalchemy,
                    save_data: dict, batch_size: int=500):
         """
@@ -84,7 +88,7 @@ class DatabaseLogic:
             - 插入資料以 Merge 方式進行, 並加入批次塞入邏輯
             * FIXME 預計將此功能拆解，分為子方法(插入/查詢/合併)運行
         """
-        conn = cursor = None
+        conn, cursor = None, None
         try:
             self.__update_connection_string(db_name)
             self.__create_database(db_name)
@@ -135,14 +139,16 @@ class DatabaseLogic:
             cursor.close()
             conn.close()
 
-    def get_datum(self, db_name: str, table_format: sqlalchemy, date: datetime=None, **kwargs):
+
+    def get_datum(self, db_name: str, table_format: sqlalchemy,
+                  date: datetime=None, **kwargs):
         """
         查詢資料
             TODO 預計加入功能
                 -參數時間範圍
                 -WHERE SQL 條件篩選
         """
-        conn = cursor = None
+        conn, cursor = None, None
         try:
             self.__update_connection_string(db_name)
             conn = pyodbc.connect(self.connection_string, autocommit=True)

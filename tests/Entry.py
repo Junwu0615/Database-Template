@@ -1,15 +1,11 @@
 # -*- coding: utf-8 -*-
-"""
-@author: PC
-Update Time: 2024-12-31
-"""
-import json
 import pandas as pd
 
-from developer.package.norm_function import DATE_YMD_ONE
-from developer.package.interface import Interface
-from developer.definition.state import State
-from developer.model.TForexQuotes import TForexQuotesField, TForexQuotesFormat
+from developer.utils.normal import DATE_YMD_ONE
+from developer.modules.interface import Interface
+from developer.modules.model.WorkStatus import Status
+from developer.modules.model.TForexQuotes import TForexQuotesField, TForexQuotesFormat
+
 
 class Entry(Interface):
     def __init__(self, do_time=None):
@@ -23,7 +19,7 @@ class Entry(Interface):
     def update_once(self):
         """ 主邏輯撰寫 """
         datum = {}
-        ret = State.ERR_UNKNOWN
+        ret = Status.ERR_UNKNOWN
         try:
             # 情境模擬: 讀取本地檔案，並將其塞入資料庫
             file = './sample/xauusd_2024-12-26.json'
@@ -57,7 +53,7 @@ class Entry(Interface):
             df = pd.DataFrame(fq_data)
             self.log_info(df)
 
-            ret = State.OK
+            ret = Status.OK
 
         except Exception as e:
             self.log_error(exc_info=True)

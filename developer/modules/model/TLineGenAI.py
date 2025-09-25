@@ -1,13 +1,9 @@
 # -*- coding: utf-8 -*-
-"""
-@author: PC
-Update Time: 2025-01-10
-"""
-from typing import Union
-from enum import Enum, IntEnum, unique
-from sqlalchemy.orm import Mapped, mapped_column
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, DateTime, Integer, BigInteger, DECIMAL, Unicode
+from developer.modules.sql.models import (Base, Union, Enum, IntEnum, unique,
+                                          Mapped, mapped_column,
+                                          Column, DateTime, Integer, BigInteger,
+                                          DECIMAL, Unicode, String)
+
 
 @unique
 class TLineGenAIField(Enum):

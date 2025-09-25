@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
-import time, schedule
-from datetime import datetime
+import schedule
 from schedule import every, run_pending
 
-from developer.definition.state import State
+# from developer.modules.model.WorkStatus import Status
+from developer.utils.normal import *
 from developer.package.norm_function import NormLogic
 from developer.package.sql_server import DatabaseLogic
 
@@ -18,6 +18,7 @@ class Interface(NormLogic, DatabaseLogic):
             self.var_next_run = []
             self.settings_schedule(do_time, self.originate)
             self.schedule_run()
+
 
     def settings_schedule(self, do_time, function):
         """
@@ -44,8 +45,10 @@ class Interface(NormLogic, DatabaseLogic):
             if d[6] == 'S':
                 every().sunday.at(t).do(function)
 
+
     def schedule_next_run(self) -> str:
         return sorted([i.next_run for i in schedule.get_jobs()])[0].__str__()
+
 
     def schedule_run(self):
         while True:
@@ -56,11 +59,14 @@ class Interface(NormLogic, DatabaseLogic):
             run_pending()
             time.sleep(1)
 
+
     def config_once(self):
         pass
 
+
     def update_once(self):
         pass
+
 
     def originate(self):
         self.var_next_run = []
