@@ -5,9 +5,10 @@ from sqlalchemy.schema import CreateTable
 from developer.utils.normal import *
 from developer.modules.ms_sql.sql_account import USERNAME, PASSWORD, DRIVER, SERVER, SERVER_HOST
 
+MODULE_NAME = __name__.upper()
+
 class FromSQLProgrammingError(Exception):
     pass
-
 
 class MSDatabase:
     def __init__(self, logger: logging.Logger=None):
