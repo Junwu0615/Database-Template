@@ -20,7 +20,7 @@ def send_message(msg: str='success', logger: logging.Logger=None,
     if logger is None:
         raise Exception('Telegram: logger 未設定')
 
-    replace_list = [':']
+    replace_list = [':', '&']
     trans_replace(msg, replace_list)
 
     url = (f'https://api.telegram.org/bot{bot_token}/'

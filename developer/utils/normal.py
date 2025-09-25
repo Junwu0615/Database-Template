@@ -6,7 +6,6 @@ import requests, statistics, pathlib
 from tqdm import tqdm
 from dotenv import load_dotenv
 from colorlog import ColoredFormatter
-from requests import Session, Response
 from decimal import Decimal, ROUND_HALF_UP
 from datetime import datetime, timedelta, timezone
 from typing import Callable, Iterator, Tuple, Any, Dict, List, Optional
