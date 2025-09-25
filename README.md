@@ -14,18 +14,18 @@
 | 事件 | 敘述 | 更新時間 |
 |:--:|--|:--:|
 | 專案上架 | Database Template | 2024-12-25 |
-| 建立常用函示 | developers.package.norm_function | 2024-12-28 |
+| 建立常用函式 | developers.package.norm_function | 2024-12-28 |
 | 資料表: 模板定義 | 依 developers.model.TForexQuotes 模板畫葫蘆 | 2024-12-28 |
-| 更新常用函示 | 日誌打印 / 字串處理 / 數值處理 / 爬蟲連線 | 2024-12-28 |
+| 更新常用函式 | 日誌打印 / 字串處理 / 數值處理 / 爬蟲連線 | 2024-12-28 |
 | 模組化 | 將 SQL 串接 Database 過程模組化，並用繼承方式使用功能 | 2024-12-28 |
 | 套件化 | 將整個功能打包成套件，用安裝方式直接使用該功能 | 2024-12-29 |
 | 定義制式規格 | update_once & config_once | 2024-12-30 |
 | 定義運行狀態 | 詳見 developers.definition.state | 2024-12-30 |
 | 加入排程邏輯 | 可依據參數定時設定，到點啟動專案 | 2024-12-30 |
 | 查詢資料: 增加可用參數 | SQL WHERE 條件篩選 | 2025-01-09 |
-| 更新 README | SQL SERVER 設定 | 2025-09-25 |
+| 更新 README | SQL SERVER 設定 + 如何建置 SQL SERVER | 2025-09-25 |
 | 嚴苛定義路徑 | - | 2025-09-25 |
-| 增設日誌邏輯 | - | 2025-09-25 |
+| 更新日誌邏輯 | - | 2025-09-25 |
 | 調整常用函式 | - | 2025-09-25 |
 | 查詢資料: 增加可用參數 | 參數時間 | - |
 | 更新底層 | 外圍包大型迴圈，基於回傳狀態判斷是否 Retry | - |
@@ -85,67 +85,66 @@ Database-Template/developer
     pip install -e .
     ```
   - ![03.jpg](/sample/03.jpg)
-- `developers.package.sql_account.py` 更改欲使用內容，或是直接設定環境變數
+- `developer.modules.ms_sql.sql_account.py` 更改欲使用內容，或是直接設定環境變數
 - 開發其他專案時可以直接引用本套件撰寫物件
 - ![02.jpg](/sample/02.jpg)
 
 <br>
 
 ## *D.　Syntax*
-
-### *I.　SQL 語法*
-- #### *新建資料庫*
-  ```sql
-  CREATE DATABASE <MyDatabase>;
-  ```
-- #### *刪除資料庫順序 : 一律手動，勿程式化*
-  ```sql
-  -- 檢查資料庫是否存在
-  SELECT name FROM master.sys.databases WHERE name = '<MyDatabase>';
-  
-  -- 強制斷開所有連接，將資料庫設為單一使用者模式以便刪除。
-  -- 因為如果有其他使用者正在使用資料庫，直接用 DROP DATABASE 會失敗。
-  ALTER DATABASE <MyDatabase> SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
-  
-  -- 直接刪除資料庫及其所有內容。
-  DROP DATABASE <MyDatabase>;
-  ```
-  
-  ```sql
-  -- 查詢該表格是否存在
-  SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = <MyDatabase>;
-  ```
-
-### *II.　Python 串接 SQL server 語法*
-- #### *顯示系統上可用的所有 ODBC 驅動*
-  ```py
-  pyodbc.drivers()
-  ```
-
-### *III.　創建 SQL SERVER ( MS SQL )*
-- #### *1.　[Docker 啟動方式](https://github.com/Junwu0615/One-Click-Database-Deployment)*
-- #### *2.　用官網的方式建立地端 SQL `# SQL2022-SSEI-Expr.exe`*
-
-
-### *IV.　其他備註*
-- #### *查看 ODBC 版本(名稱)*
-  ```
-  win + R : odbcad32 -> 切到驅動程式 -> ex: ODBC Driver 17 for SQL Server
-  ```
-  
-- #### *呼叫 SQL Server Configuration Manager*
-  ```
-  # 當資料庫 IP 變更時，有可能 SQL SERVER 無法正常啟用，需要重新設定，或是更改為 127.0.0.1
-  # 輸入對應版本的檔案名稱
-    - SQL Server 2022	SQLServerManager16.msc
-    - SQL Server 2019	SQLServerManager15.msc
-    - SQL Server 2017	SQLServerManager14.msc
-    - SQL Server 2016	SQLServerManager13.msc
-    - SQL Server 2014	SQLServerManager12.msc
-    - SQL Server 2012	SQLServerManager11.msc
-  
-    win + R : SQLServerManager16.msc
+- #### *I.　SQL 語法*
+  - #### *新建資料庫*
+    ```sql
+    CREATE DATABASE <MyDatabase>;
     ```
+  - #### *刪除資料庫順序 : 一律手動，勿程式化*
+    ```sql
+    -- 檢查資料庫是否存在
+    SELECT name FROM master.sys.databases WHERE name = '<MyDatabase>';
+  
+    -- 強制斷開所有連接，將資料庫設為單一使用者模式以便刪除。
+    -- 因為如果有其他使用者正在使用資料庫，直接用 DROP DATABASE 會失敗。
+    ALTER DATABASE <MyDatabase> SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+  
+    -- 直接刪除資料庫及其所有內容。
+    DROP DATABASE <MyDatabase>;
+    ```
+  
+    ```sql
+    -- 查詢該表格是否存在
+    SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = <MyDatabase>;
+    ```
+
+- #### *II.　Python 串接 SQL server 語法*
+  - #### *顯示系統上可用的所有 ODBC 驅動*
+    ```py
+    pyodbc.drivers()
+    ```
+
+- #### *III.　創建 SQL SERVER ( MS SQL )*
+  - #### *1.　[Docker 啟動方式](https://github.com/Junwu0615/One-Click-Database-Deployment)*
+  - #### *2.　用官網的方式建立地端 SQL `# SQL2022-SSEI-Expr.exe`*
+
+
+- #### *IV.　其他備註*
+  - #### *查看 ODBC 版本(名稱)*
+    ```
+    win + R : odbcad32 -> 切到驅動程式 -> ex: ODBC Driver 17 for SQL Server
+    ```
+  
+  - #### *呼叫 SQL Server Configuration Manager*
+    ```
+    # 當資料庫 IP 變更時，有可能 SQL SERVER 無法正常啟用，需要重新設定，或是更改為 127.0.0.1
+    # 輸入對應版本的檔案名稱
+      - SQL Server 2022	SQLServerManager16.msc
+      - SQL Server 2019	SQLServerManager15.msc
+      - SQL Server 2017	SQLServerManager14.msc
+      - SQL Server 2016	SQLServerManager13.msc
+      - SQL Server 2014	SQLServerManager12.msc
+      - SQL Server 2012	SQLServerManager11.msc
+  
+      win + R : SQLServerManager16.msc
+      ```
 
 <br>
 
