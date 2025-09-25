@@ -5,3 +5,4 @@ developer.egg-info
 
 log
 venv
+.venv
