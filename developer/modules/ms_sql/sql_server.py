@@ -15,6 +15,7 @@ class MSDatabase:
         self.db_name = 'DB_NULL'
         self.connection_string = (f'DRIVER={DRIVER};SERVER={SERVER},{SERVER_HOST};DATABASE={self.db_name};'
                                   f'UID={USERNAME};PWD={PASSWORD};')
+        self.logger.warning(self.connection_string)
         self.connection_string += 'TrustServerCertificate=Yes;' # 本地開發/docker皆可運行
 
 
