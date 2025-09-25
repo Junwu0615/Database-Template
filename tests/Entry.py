@@ -1,20 +1,27 @@
 # -*- coding: utf-8 -*-
 import pandas as pd
 
-from developer.utils.normal import DATE_YMD_ONE
+from developer.utils.normal import *
+from developer.modules.logger import Logger
 from developer.modules.interface import Interface
-from developer.modules.model.WorkStatus import Status
-from developer.modules.model.TForexQuotes import TForexQuotesField, TForexQuotesFormat
+from developer.modules.models.WorkStatus import Status
+from developer.modules.models.TForexQuotes import TForexQuotesField, TForexQuotesFormat
 
 
 class Entry(Interface):
-    def __init__(self, do_time=None):
+    def __init__(self, do_time=None, logger=None):
         do_time = do_time or []
-        super().__init__(do_time)
+        if logger is None:
+            raise Exception('Logger 未設定，請先於 __main__ 中定義')
+
+        self.logger = logger
+        super().__init__(do_time, logger)
+
 
     def config_once(self):
         """ 定義一次性變數 """
         pass
+
 
     def update_once(self):
         """ 主邏輯撰寫 """
@@ -29,7 +36,7 @@ class Entry(Interface):
             for i in loader['historical']:
                 key = f"{i['date']}_{symbol}_D1"
                 datum[key] = {
-                    TForexQuotesField.CREATEDATETIME.value: self.trans_datetime(i['date'], DATE_YMD_ONE),
+                    TForexQuotesField.CREATEDATETIME.value: self.trans_datetime(i['date'], SHORT_FORMAT),
                     TForexQuotesField.SYMBOL.value: symbol,
                     TForexQuotesField.INTERVAL.value: 'D1',
                     TForexQuotesField.OPEN.value: self.trans_decimal(i['open'], '0.01'),
@@ -51,20 +58,27 @@ class Entry(Interface):
                                      **{'SQL_WHERE': "Symbol = 'XAUUSD'"})
 
             df = pd.DataFrame(fq_data)
-            self.log_info(df)
+            self.logger.info(df)
 
             ret = Status.OK
 
         except Exception as e:
-            self.log_error(exc_info=True)
+            self.logger.error()
+
         finally:
             return ret
+
 
 if __name__ == '__main__':
     """
     功能說明
-        -排程邏輯: 參閱 developer.package.interface <settings_schedule> 方法
+        -排程邏輯: 參閱 developer.modules.interface <settings_schedule> 方法
     """
+    logger = Logger(console_name=f'.{__name__}_console',
+                    file_name=f'.{__name__}')
+
+    logger.info(logger.title_log(f'[{__name__}] 主程式啟動'))
+
     do_time = ['MTWTFss=06:00:00', 'MTWTFss=18:00:00']
-    entry = Entry(do_time)
-    # entry = Entry()
+    # entry = Entry(do_time)
+    entry = Entry(do_time, logger)

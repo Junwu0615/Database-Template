@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-from developer.modules.sql.models import (Base, Union, Enum, IntEnum, unique,
-                                          Mapped, mapped_column,
-                                          Column, DateTime, Integer, BigInteger,
-                                          DECIMAL, Unicode, String)
+from developer.modules.models import (Base, Union, Enum, IntEnum, unique,
+                                      Mapped, mapped_column,
+                                      Column, DateTime, Integer, BigInteger,
+                                      DECIMAL, Unicode, String)
 
 @unique
 class Status(IntEnum):

@@ -1,16 +1,15 @@
 # -*- coding: utf-8 -*-
 import schedule
 from schedule import every, run_pending
-
-# from developer.modules.model.WorkStatus import Status
 from developer.utils.normal import *
-from developer.modules.ms_sql.sql_server import DatabaseLogic
+from developer.modules.ms_sql.sql_server import MSDatabase
 
 # noinspection PyTypeChecker
-class Interface(NormLogic, DatabaseLogic):
-    def __init__(self, do_time: list):
-        NormLogic.__init__(self)
-        DatabaseLogic.__init__(self)
+class Interface(NormLogic, MSDatabase):
+    def __init__(self, do_time: list, logger: logging.Logger):
+        NormLogic.__init__(self, logger)
+        MSDatabase.__init__(self, logger)
+        self.logger = logger
         self.config_once()
         self.originate()
         if do_time:
@@ -54,7 +53,7 @@ class Interface(NormLogic, DatabaseLogic):
             get_next_time = self.schedule_next_run()
             if get_next_time not in self.var_next_run:
                 self.var_next_run += [get_next_time]
-                self.log_warning(f'Schedule Next Run: {get_next_time}')
+                self.logger.warning(f'Schedule Next Run: {get_next_time}')
             run_pending()
             time.sleep(1)
 
@@ -70,4 +69,4 @@ class Interface(NormLogic, DatabaseLogic):
     def originate(self):
         self.var_next_run = []
         ret = self.update_once()
-        self.log_warning(ret)
+        self.logger.warning(ret)

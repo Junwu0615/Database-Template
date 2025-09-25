@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
-import os, pyodbc, sqlalchemy
-from tqdm import tqdm
-from datetime import datetime
+import pyodbc, sqlalchemy
 from sqlalchemy.dialects import mssql
 from sqlalchemy.schema import CreateTable
+from developer.utils.normal import *
 from developer.modules.ms_sql.sql_account import USERNAME, PASSWORD, DRIVER, SERVER, SERVER_HOST
 
 
@@ -11,8 +10,9 @@ class FromSQLProgrammingError(Exception):
     pass
 
 
-class DatabaseLogic:
-    def __init__(self):
+class MSDatabase:
+    def __init__(self, logger: logging.Logger=None):
+        self.logger = logger
         self.db_name = 'DB_NULL'
         self.connection_string = (f'DRIVER={DRIVER};SERVER={SERVER},{SERVER_HOST};DATABASE={self.db_name};'
                                   f'UID={USERNAME};PWD={PASSWORD};')
@@ -41,12 +41,13 @@ class DatabaseLogic:
             if len(cursor.fetchall()) == 0:
                 sql_cmd = f'CREATE DATABASE {db_name}'
                 cursor.execute(sql_cmd)
-                self.log_warning(f'Database -> [{db_name}] Created Successfully')
+                self.logger.warning(f'Database -> [{db_name}] Created Successfully')
             # else:
-            #     self.log_warning(f'Database -> [{db_name}] Already Exists')
+            #     self.logger.warning(f'Database -> [{db_name}] Already Exists')
 
-        except:
-            self.log_error(exc_info=True)
+        except Exception as e:
+            self.logger.error()
+
         finally:
             cursor.close()
             conn.close()
@@ -68,12 +69,13 @@ class DatabaseLogic:
             if len(cursor.fetchall()) == 0:
                 sql_cmd = str(CreateTable(table_format.__table__).compile(dialect=mssql.dialect()))
                 cursor.execute(sql_cmd)
-                self.log_warning(f'Table -> [{table_name}] Created Successfully')
+                self.logger.warning(f'Table -> [{table_name}] Created Successfully')
             # else:
-            #     self.log_warning(f'Table -> [{table_name}] Already Exists')
+            #     self.logger.warning(f'Table -> [{table_name}] Already Exists')
 
-        except:
-            self.log_error(exc_info=True)
+        except Exception as e:
+            self.logger.error()
+
         finally:
             cursor.close()
             conn.close()
@@ -127,14 +129,15 @@ class DatabaseLogic:
                 try:
                     cursor.executemany(sql_cmd, feed_value)
                     s_state += len(feed_value)
-                    self.log_info(f'Store Data In The Database [M: {s_state}, F: {f_state}, T: {len(_value)}]')
+                    self.logger.info(f'Store Data In The Database [M: {s_state}, F: {f_state}, T: {len(_value)}]')
 
-                except:
+                except Exception as e:
                     f_state += len(feed_value)
-                    self.log_error(f'Store Data In The Database [M: {s_state}, F: {f_state}, T: {len(_value)}]', exc_info=True)
+                    self.logger.error(f'Store Data In The Database [M: {s_state}, F: {f_state}, T: {len(_value)}]')
 
-        except:
-            self.log_error(exc_info=True)
+        except Exception as e:
+            self.logger.error()
+
         finally:
             cursor.close()
             conn.close()
@@ -184,11 +187,13 @@ class DatabaseLogic:
                         datum[key[:-1]] = content
 
                     return datum
-                except:
-                    self.log_error(exc_info=True)
 
-        except:
-            self.log_error(exc_info=True)
+                except Exception as e:
+                    self.logger.error()
+
+        except Exception as e:
+            self.logger.error()
+
         finally:
             cursor.close()
             conn.close()

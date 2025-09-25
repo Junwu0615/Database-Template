@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from colorlog import ColoredFormatter
 from logging.handlers import RotatingFileHandler
-from developer.modules.normal import *
+from developer.utils.normal import *
 
 MODULE_NAME = __name__.upper()
 

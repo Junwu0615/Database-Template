@@ -2,7 +2,8 @@
 import os, sys, time, json, copy, logging, urllib3
 import re, collections, operator, random, math
 import requests, statistics, pathlib
-# from dateutil import tz
+
+from tqdm import tqdm
 from dotenv import load_dotenv
 from colorlog import ColoredFormatter
 from requests import Session, Response
@@ -11,9 +12,10 @@ from datetime import datetime, timedelta, timezone
 from typing import Callable, Iterator, Tuple, Any, Dict, List, Optional
 
 
-DATE_YMD_ONE = '%Y-%m-%d'
-DATE_YMD_TWO = '%Y/%m/%d'
-DATE_YMD_3TH = '%Y-%m-%d %H:%M:%S'
+SHORT_FORMAT = '%Y-%m-%d'
+SHORT_FORMAT_2 = '%Y/%m/%d'
+LONG_FORMAT = '%Y-%m-%d %H:%M:%S'
+LONG_T_FORMAT = '%Y-%m-%dT%H:%M:%S'
 
 # TAIWAN = tz.gettz('Asia/Taipei')
 TZ_UTC_0 = timezone(timedelta(hours=0)) # UTC+8
@@ -33,7 +35,8 @@ class DecimalEncoder(json.JSONEncoder):
 
 
 class NormLogic:
-    def __init__(self):
+    def __init__(self, logger: logging.Logger=None):
+        self.logger = logger
         self.session = Session()
 
 
