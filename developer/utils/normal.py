@@ -1,10 +1,14 @@
 # -*- coding: utf-8 -*-
-import os, json, logging
+import os, sys, time, json, copy, logging, urllib3
+import re, collections, operator, random, math
+import requests, statistics, pathlib
 # from dateutil import tz
-from datetime import datetime, timedelta, tzinfo
+from dotenv import load_dotenv
 from colorlog import ColoredFormatter
 from requests import Session, Response
 from decimal import Decimal, ROUND_HALF_UP
+from datetime import datetime, timedelta, timezone
+from typing import Callable, Iterator, Tuple, Any, Dict, List, Optional
 
 
 DATE_YMD_ONE = '%Y-%m-%d'
@@ -53,16 +57,16 @@ class NormLogic:
         return target
 
 
-    def get_datetime_now(self, tz: tz=TZ_UTC_8) -> datetime:
+    def get_datetime_now(self, tz: timezone=TZ_UTC_8) -> datetime:
         return datetime.now().replace(tzinfo=tz)
 
 
-    def trans_datetime(self, target: str, date_format: str, tz: tz=TZ_UTC_8) -> datetime:
+    def trans_datetime(self, target: str, date_format: str, tz: timezone=TZ_UTC_8) -> datetime:
         # 轉台灣時間 UTC +8
         return datetime.strptime(target, date_format).replace(tzinfo=tz)
 
 
-    def trans_timestamp(self, target, change_num: float=0, tz: tz=TZ_UTC_8) -> datetime:
+    def trans_timestamp(self, target, change_num: float=0, tz: timezone=TZ_UTC_8) -> datetime:
         # 轉台灣時間 UTC +8
         return datetime.fromtimestamp(target + change_num).replace(tzinfo=tz)
 

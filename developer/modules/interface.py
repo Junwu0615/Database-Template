@@ -4,8 +4,7 @@ from schedule import every, run_pending
 
 # from developer.modules.model.WorkStatus import Status
 from developer.utils.normal import *
-from developer.package.norm_function import NormLogic
-from developer.package.sql_server import DatabaseLogic
+from developer.modules.ms_sql.sql_server import DatabaseLogic
 
 # noinspection PyTypeChecker
 class Interface(NormLogic, DatabaseLogic):

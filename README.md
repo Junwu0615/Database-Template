@@ -43,21 +43,32 @@ Database-Template/developer
   │
   ├── __init__.py
   │
-  ├── definition
-  │   ├── __init__.py
-  │   └── state.py
+  ├── config
+  │   └── __init__.py
   │
-  ├── model
-  │   ├── __init__.py
-  │   ├── TForexQuotes.py
-  │   └── TLineGenAI.py
+  ├── lib
+  │   └── __init__.py
   │
-  └── package
+  ├── modules
+  │   ├── __init__.py
+  │   │
+  │   ├── model
+  │   │   ├── __init__.py
+  │   │   ├── TForexQuotes.py
+  │   │   ├── TLineGenAI.py
+  │   │   └── WorkStatus.py
+  │   │
+  │   ├── ms_sql
+  │   │   ├── __init__.py
+  │   │   ├── sql_account.py
+  │   │   └── sql_server.py
+  │   │
+  │   ├── interface.py
+  │   └── logger.py
+  │
+  └── utils
       ├── __init__.py
-      ├── interface.py
-      ├── norm_function.py
-      ├── sql_account.py
-      └── sql_server.py
+      └── normal.py
 ```
 
 ![00.gif](/sample/00.gif)
@@ -111,7 +122,12 @@ Database-Template/developer
   pyodbc.drivers()
   ```
 
-### *III.　其他備註*
+### *III.　創建 SQL SERVER ( MS SQL )*
+- #### *1.　[Docker 啟動方式](https://github.com/Junwu0615/One-Click-Database-Deployment)*
+- #### *2.　用官網的方式建立地端 SQL `# SQL2022-SSEI-Expr.exe`*
+
+
+### *IV.　其他備註*
 - #### *查看 ODBC 版本(名稱)*
   ```
   win + R : odbcad32 -> 切到驅動程式 -> ex: ODBC Driver 17 for SQL Server
@@ -189,7 +205,7 @@ Database-Template/developer
 <br>
 
 
-## *E.　Reference Sources*
+## *F.　Reference Sources*
 - [特別感謝 DL 前輩](https://github.com/dl-jack-123)
 - [OpenAI ChatGPT](https://openai.com/chatgpt/overview/)
 - [輕量級 SQL IDE: Azure Data Studio](https://learn.microsoft.com/en-us/azure-data-studio/download-azure-data-studio?view=sql-server-ver16&tabs=win-install%2Cwin-user-install%2Credhat-install%2Cwindows-uninstall%2Credhat-uninstall) <br>
