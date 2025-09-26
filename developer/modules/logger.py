@@ -137,4 +137,4 @@ class Logger:
 
 
     def title_log(self, title_name: str) -> str:
-        return f"\n{'='*TITLE_SYMBOL_NUMBER} {title_name} {'='*TITLE_SYMBOL_NUMBER}\n"
+        return f"\n{'='*TITLE_SYMBOL_NUMBER} {title_name} {'='*TITLE_SYMBOL_NUMBER}\n\n"
